@@ -69,5 +69,6 @@ The resulting `StyleOverride` object can then be used to dynamically set the the
 > Note: This library is *NOT* intended to replace the existing Android system for creating `Themes` as XML 
 > definitions. It is intended that this library be used in scenarios where it is desireable to release only
 > one instance of an application but still have it "Themed" dynamically. Usually this would entail the changing
-> of the style via some kind of external (online) service. For example where a single application is distributed to > multiple end user clients each requiring their own branding.
+> of the style via some kind of external (online) service. For example where a single application is distributed to
+> multiple end user clients each requiring their own branding.
 > (online) service
