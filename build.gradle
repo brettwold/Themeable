@@ -1,0 +1,112 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        classpath 'org.robolectric:robolectric-gradle-plugin:1.0.1'
+    }
+}
+
+apply from: 'dependencies.gradle'
+
+allprojects {
+    apply plugin: 'jacoco'
+
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+    }
+
+    jacoco {
+        toolVersion = "0.7.1.201405082137"
+        reportsDir = file("${projectDir}/build/reports/jacoco")
+    }
+
+    def coverageSourceDirs = [
+            'src/main/java',
+            'src/main/aidl'
+    ]
+
+    task jacocoTestReportcus(type: JacocoReport, dependsOn: ["testDebug", "assembleDebugAndroidTest"]) {
+        group = "Reporting"
+        description = "Generate Jacoco coverage reports after running tests."
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+        classDirectories = fileTree(
+                dir: './build/intermediates/classes/debug',
+                excludes: ['**/R*.class',
+                           '**/*$InjectAdapter.class',
+                           '**/*$ModuleAdapter.class',
+                           '**/*$ViewInjector*.class',
+                           '**/Dagger*.class',
+                           '**/*_Members*.class',
+                           '**/*_Get*.class',
+                           '**/*_Provide*.class',
+                           '**/*_Factory*.class'
+                ])
+        sourceDirectories = files(coverageSourceDirs)
+        executionData = files("$buildDir/jacoco/testDebug.exec")
+        // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
+        // We iterate through the compiled .class tree and rename $$ to $.
+        doFirst {
+            new File("$buildDir/intermediates/classes/").eachFileRecurse { file ->
+                if (file.name.contains('$$')) {
+                    file.renameTo(file.path.replace('$$', '$'))
+                }
+            }
+        }
+    }
+
+    task customSigning(type: Exec, dependsOn: 'assembleRelease') {
+        doFirst {
+            if (!rootProject.hasProperty('keystore_path')) {
+                throw new InvalidUserDataException('Missing path to the customSigning keystore.');
+            } else if (file("build/outputs/apk/${project.name}-release-unsigned.apk").exists()) {
+                executable "jarsigner"
+                args "-keystore", "${keystore_path}", "-storepass", "${keystore_key_password}", "-sigalg", "MD5withRSA", "-digestalg", "SHA-256", "-signedjar", "build/outputs/apk/${project.name}-release-albert.apk", "build/outputs/apk/${project.name}-release-unsigned.apk", "application"
+            } else {
+                throw new InvalidUserDataException("Nothing to sign here...")
+            }
+        }
+    }
+
+    task customPlatformSigning(type: Exec, dependsOn: 'assembleRelease') {
+        doFirst {
+            if (!rootProject.hasProperty('keystore_path')) {
+                throw new InvalidUserDataException('Missing path to the customSigning keystore.');
+            } else if (file("build/outputs/apk/${project.name}-release-unsigned.apk").exists()) {
+                executable "jarsigner"
+                args "-keystore", "${platform_keystore_path}", "-storepass", "${platform_key_password}", "-sigalg", "MD5withRSA", "-digestalg", "SHA-256", "-signedjar", "build/outputs/apk/${project.name}-platform-albert.apk", "build/outputs/apk/${project.name}-release-unsigned.apk", "system_apps_platform_developer"
+            } else {
+                throw new InvalidUserDataException("Nothing to sign here...")
+            }
+        }
+    }
+
+    task installPlatformSigned(type: Exec, dependsOn: ['customPlatformSigning']) {
+        if (file("build/outputs/apk/${project.name}-platform-albert.apk").exists()) {
+            executable "adb"
+            args "install", "-r", "build/outputs/apk/${project.name}-platform-albert.apk"
+        } else {
+            executable "echo"
+            args "Nothing to deploy here..."
+        }
+    }
+
+    task installCustomSigned(type: Exec, dependsOn: ['customSigning']) {
+        if (file("build/outputs/apk/${project.name}-release-albert.apk").exists()) {
+            executable "adb"
+            args "install", "-r", "build/outputs/apk/${project.name}-release-albert.apk"
+        } else {
+            executable "echo"
+            args "Nothing to deploy here..."
+        }
+    }
+}

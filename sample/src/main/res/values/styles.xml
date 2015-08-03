@@ -1,0 +1,36 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
+
+    <style name="Title" parent="@android:style/TextAppearance.Large">
+        <item name="android:textSize">@dimen/title_text</item>
+        <item name="android:textColor">@color/default_title_text</item>
+        <item name="android:paddingTop">@dimen/title_padding</item>
+        <item name="android:paddingBottom">@dimen/title_padding_bottom</item>
+    </style>
+
+    <style name="PlainText" parent="@android:style/TextAppearance.Large">
+        <item name="android:textSize">@dimen/normal_text</item>
+        <item name="android:textColor">@color/default_text</item>
+        <item name="android:paddingBottom">@dimen/title_padding_bottom</item>
+    </style>
+
+    <style name="Button" parent="@android:style/TextAppearance.Large">
+        <item name="android:background">@drawable/default_button</item>
+        <item name="android:textColor">@color/default_button_text</item>
+        <item name="android:textSize">@dimen/button_text</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:layout_margin">@dimen/button_margin</item>
+        <item name="android:padding">@dimen/button_padding</item>
+    </style>
+
+    <style name="ButtonFull" parent="Button">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="ButtonPrimary" parent="ButtonFull">
+        <item name="android:background">@drawable/primary_button</item>
+    </style>
+
+</resources>

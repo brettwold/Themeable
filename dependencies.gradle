@@ -1,0 +1,69 @@
+ext {
+
+    butterKnifeVersion = '6.1.0'
+    recyclerViewVersion = '22.1.1'
+    supportLibrary = '22.1.1'
+    designLibrary = '22.2.0'
+    daggerVersion = '2.0.1'
+    spongycastleVersion = '1.51.0.0'
+    okhttpVersion = '2.4.0'
+    injectVersion = '1'
+    annotationsVersion = '1.2'
+    gsonVersion = '2.3.1'
+
+    junitVersion = '4.12'
+    hamcrestVersion = '1.3'
+    mockitoVersion = '1.9.5'
+    robolectricVersion = '2.4'
+
+    daggerCompilerVersion = '2.0.1'
+
+    firebase = '2.3.1'
+    rxAndroidVersion = '0.25.0'
+    rxJavaVersion = '1.0.10'
+
+    presentationDependencies = [
+
+            butterKnife      : "com.jakewharton:butterknife:$butterKnifeVersion",
+            support          : "com.android.support:support-v4:$supportLibrary",
+            recyclerView     : "com.android.support:recyclerview-v7:$recyclerViewVersion",
+            cardView         : "com.android.support:cardview-v7:$supportLibrary",
+            appCompat        : "com.android.support:appcompat-v7:$supportLibrary",
+            supportAnnotation: "com.android.support:support-annotations:$supportLibrary",
+            design           : "com.android.support:design:$designLibrary",
+    ]
+
+    domainDependencies = [
+
+            inject           : "javax.inject:javax.inject:$injectVersion",
+            annotations      : "javax.annotation:javax.annotation-api:$annotationsVersion",
+            dagger           : "com.google.dagger:dagger:$daggerVersion",
+            okHttp           : "com.squareup.okhttp:okhttp:$okhttpVersion",
+            spongyCastleCore : "com.madgag.spongycastle:core:$spongycastleVersion",
+            spongyCastleProv : "com.madgag.spongycastle:prov:$spongycastleVersion",
+            rxAndroid        : "io.reactivex:rxandroid:$rxAndroidVersion",
+            rxJava           : "io.reactivex:rxjava:$rxJavaVersion",
+            gson             : "com.google.code.gson:gson:$gsonVersion",
+    ]
+
+    modelDependencies = [
+
+            fireBase        : "com.firebase:firebase-client-android:$firebase",
+    ]
+
+    testDependencies = [
+
+            junit           : "junit:junit:$junitVersion",
+            hamcrestCore    : "org.hamcrest:hamcrest-core:$hamcrestVersion",
+            hamcrestInt     : "org.hamcrest:hamcrest-integration:$hamcrestVersion",
+            hamcrestLib     : "org.hamcrest:hamcrest-library:$hamcrestVersion",
+            mockito          : "org.mockito:mockito-core:$mockitoVersion",
+            mockwebserver   : "com.squareup.okhttp:mockwebserver:$okhttpVersion",
+            robolectric     : "org.robolectric:robolectric:$robolectricVersion",
+    ]
+
+    aptDependencies = [
+
+            dagger          : "com.google.dagger:dagger-compiler:$daggerCompilerVersion",
+    ]
+}
