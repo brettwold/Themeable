@@ -2,6 +2,9 @@
 
 This library allows Android developers to programmatically set styles on View elements during runtime. Also the library aims to reduce the boilerplate code need to set styles.
 
+> Currently this library is in development and subject to change without notice. Consider it in raw Alpha form and 
+> *not* recommended for production use *at all*.
+
 ## Binding a style
 
 Styles are bound to elements in your Activity/Fragment/Dialog using the `@BindStyle` annotation. The annotation can be used to directly bind a style to a single View element or to bind a style to an array of view elements given by there Android resource ids.
