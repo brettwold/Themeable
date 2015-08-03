@@ -71,4 +71,3 @@ The resulting `StyleOverride` object can then be used to dynamically set the the
 > one instance of an application but still have it "Themed" dynamically. Usually this would entail the changing
 > of the style via some kind of external (online) service. For example where a single application is distributed to
 > multiple end user clients each requiring their own branding.
-> (online) service
