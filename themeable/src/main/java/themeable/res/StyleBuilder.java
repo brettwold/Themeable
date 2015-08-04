@@ -113,6 +113,16 @@ public class StyleBuilder implements StyleableConstants {
     }
 
     /**
+     * Sets the capitalisation of the text of a view on or off.
+     * @param caps If ture all text will be captialised
+     * @return StyleBuilder
+     */
+    public StyleBuilder setTextAllCaps(boolean caps) {
+        overrideAppearance.setBoolean(textAllCaps, caps);
+        return this;
+    }
+
+    /**
      * Build the new override and return the resultant {@link StyleOverride} object
      * @return The new {@link StyleOverride} object
      */

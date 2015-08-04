@@ -69,15 +69,15 @@ public class MainActivity extends AppCompatActivity {
 
         redButtonTheme = new StyleBuilder(this, R.style.ButtonFull)
                 .setTextColor(null, Color.WHITE)
-                .setBackground(getResources().getDrawable(R.drawable.primary_button))
                 .setTypeface(INDIE_FLOWER)
                 .build();
 
         blueTheme = new StyleBuilder(this, R.style.Title)
-                .setTextColor(null, Color.BLUE)
                 .setBackgroundColor(Color.TRANSPARENT)
                 .setTypeface(ROBOTO_BOLD)
+                .setTextColor(null, Color.BLUE)
                 .setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
+                .setTextAllCaps(true)
                 .build();
 
         greenTheme = new StyleBuilder(this, R.style.Title)

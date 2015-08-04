@@ -48,15 +48,19 @@ public class ThemeableTextView implements ViewOverride, StyleableConstants {
                 textView.setTextColor(colors.getColorStateList());
             }
 
-            int color = appearance.getColor(textColorHighlight, 0);
-            textView.setHighlightColor(color);
+            if(appearance.hasColorOrDrawable(textColorHighlight)) {
+                int color = appearance.getColor(textColorHighlight, 0);
+                textView.setHighlightColor(color);
+            }
 
-            Drawable d = appearance.getDrawable(backgroundColor);
-            if(d != null) {
-                setBackground(d);
-            } else {
-                color = appearance.getColor(backgroundColor, 0);
-                textView.setBackgroundColor(color);
+            if(appearance.hasColorOrDrawable(backgroundColor)) {
+                Drawable d = appearance.getDrawable(backgroundColor);
+                if(d != null) {
+                    setBackground(d);
+                } else {
+                    int color = appearance.getColor(backgroundColor, 0);
+                    textView.setBackgroundColor(color);
+                }
             }
 
             String font = appearance.getTypeface(typeface);
@@ -69,6 +73,7 @@ public class ThemeableTextView implements ViewOverride, StyleableConstants {
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
             }
 
+            textView.setAllCaps(appearance.getBoolean(textAllCaps));
 
 //            colors = appearance.getColorStateList(com.android.internal.R.styleable.TextAppearance_textColorHint);
 //            if (colors != null) {
@@ -90,10 +95,7 @@ public class ThemeableTextView implements ViewOverride, StyleableConstants {
 //                textView.setShadowLayer(r, dx, dy, shadowcolor);
 //            }
 //
-//            if (appearance.getBoolean(com.android.internal.R.styleable.TextAppearance_textAllCaps,
-//                    false)) {
-//                //            textView.setTransformationMethod(new AllCapsTransformationMethod(getContext()));
-//            }
+
 
         } else {
             restore();

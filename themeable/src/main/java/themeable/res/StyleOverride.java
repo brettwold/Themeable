@@ -20,6 +20,7 @@ public class StyleOverride {
     private SparseArray<Drawable> drawables = new SparseArray<Drawable>();
     private SparseArray<String> fonts = new SparseArray<String>();
     private SparseIntArray dimensions = new SparseIntArray();
+    private SparseArray<Boolean> bools = new SparseArray<Boolean>();
 
     public StyleOverride(int styleResId) {
         this.styleResId = styleResId;
@@ -31,6 +32,10 @@ public class StyleOverride {
 
     public void setColor(int resid, int color) {
         integerOverrides.put(resid, color);
+    }
+
+    public boolean hasColorOrDrawable(int resid) {
+        return integerOverrides.indexOfKey(resid) >= 0 || drawables.indexOfKey(resid) >= 0;
     }
 
     public int getColor(int resid, int defaultColor) {
@@ -78,6 +83,17 @@ public class StyleOverride {
             return dimensions.get(resid);
         }
         return defaultValue;
+    }
+
+    public void setBoolean(int resid, boolean value) {
+        bools.put(resid, value);
+    }
+
+    public boolean getBoolean(int resid) {
+        if(bools.indexOfKey(resid) >= 0) {
+            return bools.get(resid);
+        }
+        return false;
     }
 
 }
