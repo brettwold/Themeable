@@ -2,8 +2,6 @@ package themeable.widget;
 
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.TypedValue;
 import android.widget.TextView;
 
@@ -11,34 +9,33 @@ import themeable.Themeable;
 import themeable.ThemeableFonts;
 import themeable.res.ColorStateListWrapper;
 import themeable.res.StyleOverride;
-import themeable.res.StyleableConstants;
 
 /**
  * Created by brett on 31/07/15.
  */
-public class ThemeableTextView implements ViewOverride, StyleableConstants {
+public class ThemeableTextView extends ThemeableView {
 
     private static final String TAG = ThemeableTextView.class.getSimpleName();
 
     private TextView textView;
-    protected int styleResId;
 
-    private Drawable originalBackground;
     private Typeface originalTypeface;
     private float originalTextSize;
     private ColorStateList originalColors;
 
     public ThemeableTextView(TextView textView, int styleResId) {
+        super(textView, styleResId);
         this.textView = textView;
         this.styleResId = styleResId;
-        originalBackground = textView.getBackground();
         originalTypeface = textView.getTypeface();
-        originalTextSize = textView.getTextSize();
         originalColors = textView.getTextColors();
+        originalTextSize = textView.getTextSize();
     }
 
     @Override
     public void overrideAppearance() {
+
+        super.overrideAppearance();
 
         StyleOverride appearance = Themeable.getStyle(styleResId);
         if(appearance != null) {
@@ -53,16 +50,6 @@ public class ThemeableTextView implements ViewOverride, StyleableConstants {
                 textView.setHighlightColor(color);
             }
 
-            if(appearance.hasColorOrDrawable(backgroundColor)) {
-                Drawable d = appearance.getDrawable(backgroundColor);
-                if(d != null) {
-                    setBackground(d);
-                } else {
-                    int color = appearance.getColor(backgroundColor, 0);
-                    textView.setBackgroundColor(color);
-                }
-            }
-
             String font = appearance.getTypeface(typeface);
             if(font != null) {
                 ThemeableFonts.setTypeface(textView.getContext(), textView, font);
@@ -73,7 +60,9 @@ public class ThemeableTextView implements ViewOverride, StyleableConstants {
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
             }
 
-            textView.setAllCaps(appearance.getBoolean(textAllCaps));
+            if(appearance.hasBoolean(textAllCaps)) {
+                textView.setAllCaps(appearance.getBoolean(textAllCaps));
+            }
 
 //            colors = appearance.getColorStateList(com.android.internal.R.styleable.TextAppearance_textColorHint);
 //            if (colors != null) {
@@ -95,26 +84,17 @@ public class ThemeableTextView implements ViewOverride, StyleableConstants {
 //                textView.setShadowLayer(r, dx, dy, shadowcolor);
 //            }
 //
-
-
         } else {
             restore();
         }
     }
 
-    private void restore() {
+    protected void restore() {
+        super.restore();
         textView.setTextAppearance(textView.getContext(), styleResId);
-        setBackground(originalBackground);
         textView.setTypeface(originalTypeface);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, originalTextSize);
         textView.setTextColor(originalColors);
     }
 
-    private void setBackground(Drawable originalBackground) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackground(originalBackground);
-        } else {
-            textView.setBackgroundDrawable(originalBackground);
-        }
-    }
 }

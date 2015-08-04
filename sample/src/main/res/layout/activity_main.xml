@@ -46,7 +46,13 @@
         android:layout_gravity="center_horizontal"
         style="@style/ButtonPrimary"/>
 
-
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Restore"
+        android:id="@+id/button_restore"
+        android:layout_gravity="center_horizontal"
+        style="@style/ButtonFull"/>
 
 
 </LinearLayout>

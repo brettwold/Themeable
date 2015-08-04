@@ -38,7 +38,6 @@ public class ColorStateListWrapper {
 
     public void setColor(int[] colorStates, int color) {
         if(colorStates == null || colorStates.length == 0) {
-            Log.d(TAG, "Setting default color: " + color);
             colors[0] = color;
         } else {
             boolean exists = false;

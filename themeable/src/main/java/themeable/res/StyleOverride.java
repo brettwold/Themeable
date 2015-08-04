@@ -21,6 +21,7 @@ public class StyleOverride {
     private SparseArray<String> fonts = new SparseArray<String>();
     private SparseIntArray dimensions = new SparseIntArray();
     private SparseArray<Boolean> bools = new SparseArray<Boolean>();
+    private SparseArray<StateListColourDrawableBuilder> builders = new SparseArray<StateListColourDrawableBuilder>();
 
     public StyleOverride(int styleResId) {
         this.styleResId = styleResId;
@@ -35,7 +36,7 @@ public class StyleOverride {
     }
 
     public boolean hasColorOrDrawable(int resid) {
-        return integerOverrides.indexOfKey(resid) >= 0 || drawables.indexOfKey(resid) >= 0;
+        return integerOverrides.indexOfKey(resid) >= 0 || drawables.indexOfKey(resid) >= 0 || builders.indexOfKey(resid) >= 0;
     }
 
     public int getColor(int resid, int defaultColor) {
@@ -57,11 +58,18 @@ public class StyleOverride {
     }
 
     public Drawable getDrawable(int resid) {
+        if(builders.indexOfKey(resid) >= 0) {
+            return builders.get(resid).getDrawable();
+        }
         return drawables.get(resid);
     }
 
     public void setDrawable(int resid, Drawable drawable) {
         drawables.put(resid, drawable);
+    }
+
+    public void setDrawable(int resid, StateListColourDrawableBuilder stateListColourBuilder) {
+        builders.put(resid, stateListColourBuilder);
     }
 
     public void setTypeface(int resid, String fontName) {
@@ -94,6 +102,10 @@ public class StyleOverride {
             return bools.get(resid);
         }
         return false;
+    }
+
+    public boolean hasBoolean(int resid) {
+        return bools.indexOfKey(resid) >= 0;
     }
 
 }

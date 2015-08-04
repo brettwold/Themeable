@@ -7,11 +7,8 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Button;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by brett on 31/07/15.
@@ -30,8 +27,10 @@ public class StyleBuilder implements StyleableConstants {
         this.context = context;
         this.styleResId = styleResId;
 
-        int[] attrs = getResourceDeclareStyleableIntArray(context, "TextAppearance");
-        originalTextAppearance = context.obtainStyledAttributes(styleResId, attrs);
+        int[] attrs = ResourceUtils.getResourceDeclareStyleableIntArray(context, "TextAppearance");
+        if(attrs != null) {
+            originalTextAppearance = context.obtainStyledAttributes(styleResId, attrs);
+        }
 
         overrideAppearance = new StyleOverride(styleResId);
     }
@@ -74,6 +73,11 @@ public class StyleBuilder implements StyleableConstants {
      */
     public StyleBuilder setBackground(Drawable drawable) {
         overrideAppearance.setDrawable(backgroundColor, drawable);
+        return this;
+    }
+
+    public StyleBuilder setBackground(StateListColourDrawableBuilder stateListColourBuilder) {
+        overrideAppearance.setDrawable(backgroundColor, stateListColourBuilder);
         return this;
     }
 
@@ -129,21 +133,6 @@ public class StyleBuilder implements StyleableConstants {
     public StyleOverride build() {
         originalTextAppearance.recycle();
         return overrideAppearance;
-    }
-
-    private static final int[] getResourceDeclareStyleableIntArray(Context context, String name) {
-        try {
-            Class cls = Class.forName(context.getPackageName() + ".R$styleable");
-            Field f = cls.getField(name);
-            if(f != null) {
-                int[] ret = (int[])f.get(null);
-                return ret;
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to get resource declared array", e);
-        }
-
-        return null;
     }
 
 }

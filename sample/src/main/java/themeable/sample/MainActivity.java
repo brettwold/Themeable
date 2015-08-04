@@ -15,6 +15,7 @@ import butterknife.OnClick;
 import themeable.BindStyle;
 import themeable.Themeable;
 import themeable.ThemeableFonts;
+import themeable.res.StateListColourDrawableBuilder;
 import themeable.res.StyleBuilder;
 import themeable.res.StyleOverride;
 
@@ -60,54 +61,82 @@ public class MainActivity extends AppCompatActivity {
         ThemeableFonts.registerTypeface(ROBOTO_LIGHT, "fonts/Roboto-Light.ttf");
         ThemeableFonts.registerTypeface(INDIE_FLOWER, "fonts/IndieFlower.ttf");
 
+        int red = Color.parseColor("#ffff3217");
+        int redPress = Color.parseColor("#ffe2856e");
+
+        int green = Color.parseColor("#ff6fe153");
+        int greenPress = Color.parseColor("#ff5c6784");
+        int greenButton = Color.parseColor("#ff157f1f");
+        int greenButtonText = Color.parseColor("#ff1d263b");
+
+        int blue = Color.parseColor("#ff62b0e0");
+        int bluePress = Color.parseColor("#fff4f1bb");
+        int blueButton = Color.parseColor("#ff9bc1bc");
+        int blueButtonText = Color.parseColor("#ffe6ebe0");
+
         redTheme = new StyleBuilder(this, R.style.Title)
-                .setTextColor(null, Color.RED)
+                .setTextColor(null, red)
                 .setBackgroundColor(Color.TRANSPARENT)
                 .setTypeface(INDIE_FLOWER)
-                .setTextSize(TypedValue.COMPLEX_UNIT_SP, 36)
+                .setTextSize(TypedValue.COMPLEX_UNIT_SP, 48)
+                .setTextAllCaps(false)
                 .build();
 
         redButtonTheme = new StyleBuilder(this, R.style.ButtonFull)
                 .setTextColor(null, Color.WHITE)
+                .setBackground(new StateListColourDrawableBuilder(red)
+                        .addStateColour(new int[]{android.R.attr.state_pressed}, redPress))
                 .setTypeface(INDIE_FLOWER)
                 .build();
 
         blueTheme = new StyleBuilder(this, R.style.Title)
                 .setBackgroundColor(Color.TRANSPARENT)
                 .setTypeface(ROBOTO_BOLD)
-                .setTextColor(null, Color.BLUE)
+                .setTextColor(null, blue)
                 .setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
                 .setTextAllCaps(true)
                 .build();
 
+        blueButtonTheme = new StyleBuilder(this, R.style.ButtonFull)
+                .setTextColor(null, blueButtonText)
+                .setBackground(new StateListColourDrawableBuilder(blueButton)
+                        .addStateColour(new int[]{android.R.attr.state_pressed}, bluePress))
+                .setTypeface(ROBOTO_BOLD)
+                .setTextAllCaps(true)
+                .build();
+
         greenTheme = new StyleBuilder(this, R.style.Title)
-                .setTextColor(null, Color.GREEN)
+                .setTextColor(null, green)
                 .setBackgroundColor(Color.TRANSPARENT)
                 .setTypeface(ROBOTO_THIN)
                 .setTextSize(TypedValue.COMPLEX_UNIT_SP, 30)
+                .setTextAllCaps(false)
                 .build();
 
         greenButtonTheme = new StyleBuilder(this, R.style.ButtonFull)
-                .setTextColor(null, Color.GREEN)
-                .setBackground(getResources().getDrawable(R.drawable.primary_button))
+                .setTextColor(null, greenButtonText)
+                .setBackground(new StateListColourDrawableBuilder(greenButton)
+                        .addStateColour(new int[]{android.R.attr.state_pressed}, greenPress))
                 .setTypeface(ROBOTO_LIGHT)
                 .build();
 
     }
 
 
-    @OnClick({R.id.button_red, R.id.button_blue, R.id.button_green})
+    @OnClick({R.id.button_red, R.id.button_blue, R.id.button_green, R.id.button_restore})
     public void setColour(Button b) {
         switch(b.getId()) {
             case R.id.button_red:
                 Themeable.applyStyles(redTheme, redButtonTheme);
                 break;
             case R.id.button_blue:
-                Themeable.applyStyles(blueTheme);
-                Themeable.removeStyles(R.style.ButtonFull);
+                Themeable.applyStyles(blueTheme, blueButtonTheme);
                 break;
             case R.id.button_green:
                 Themeable.applyStyles(greenTheme, greenButtonTheme);
+                break;
+            case R.id.button_restore:
+                Themeable.removeStyles(R.style.ButtonFull, R.style.Title);
                 break;
         }
     }
