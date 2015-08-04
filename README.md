@@ -2,6 +2,10 @@
 
 This library allows Android developers to programmatically set styles on View elements during runtime. Also the library aims to reduce the boilerplate code need to set styles.
 
+* Bind dynamic styles to view objects using annotations
+* Boilerplate code is generated for you
+* Group views into Lists set styles on all of them at once
+
 > Currently this library is in development and subject to change without notice. Consider it in raw Alpha form and 
 > *not* recommended for production use *at all*.
 
