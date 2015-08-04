@@ -57,7 +57,7 @@ public class Themeable {
      *
      * @param styleResIds The style ids to remove overrides from
      */
-    public static void removeCustomStyles(int... styleResIds) {
+    public static void removeStyles(int... styleResIds) {
         if(bound) {
             for (int resid : styleResIds) {
                 overrides.remove(resid);

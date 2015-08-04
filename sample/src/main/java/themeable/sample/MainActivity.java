@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.button_blue:
                 Themeable.applyStyles(blueTheme);
-                Themeable.removeCustomStyles(R.style.ButtonFull);
+                Themeable.removeStyles(R.style.ButtonFull);
                 break;
             case R.id.button_green:
                 Themeable.applyStyles(greenTheme, greenButtonTheme);
