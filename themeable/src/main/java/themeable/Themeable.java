@@ -31,6 +31,7 @@ public class Themeable {
             StyleBinder styleBinder = findStyleBinderForClass(source.getClass());
             styleBinder.bind(source, rootView);
             bound = true;
+            notifyBinders();
         } catch (Exception e) {
             Log.e(TAG, "Failed to find binding class", e);
         }
@@ -47,6 +48,7 @@ public class Themeable {
                 overrides.put(o.getStyleResourceId(), o);
             }
             notifyBinders();
+            return;
         }
         throw new RuntimeException("Attempt to apply styles before Themeables are bound. bind() method must be called first");
     }
@@ -63,6 +65,7 @@ public class Themeable {
                 overrides.remove(resid);
             }
             notifyBinders();
+            return;
         }
         throw new RuntimeException("Attempt to remove styles before Themeables are bound. bind() method must be called first");
     }
