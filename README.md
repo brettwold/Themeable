@@ -63,10 +63,40 @@ To change a style you create an instance of a `StyleBuilder` and use it to defin
             .build();
 ```
 
-The resulting `StyleOverride` object can then be used to dynamically set the theme whenever you need to.
+The resulting `StyleOverride` object can then be used to dynamically apply the theme whenever you need to.
 
 ```java
-    Themeable.setStyle(blueTheme);
+    Themeable.applyStyles(blueTheme);
+```
+
+Several styles can be passed to this method at once to setup more than one style resource at a time.
+
+If you wish to restore the original style at any point then you can call `removeStyles` passing in a list of style ids you wish to restore.
+
+```java
+    Themeable.removeStyles(R.style.Title)
+```
+
+## Fonts and typefaces
+
+Fonts can be registered with library and then used to style view elements within your application. The font files must exist within your application and be present in the Android assets folder. The fonts can then be resgistered with Themeable by calling `ThemeableFonts.registerTypeface` method. Each font registered should be given a unique name.
+
+```java
+    ThemeableFonts.registerTypeface("ROBOTO_BOLD", "fonts/Roboto-Bold.ttf");
+```
+In the example above the `Roboto-Bold.ttf` file has been placed in the assets folder under a sub folder called _fonts_.
+
+Once the font has been registered it can be used in the style overriding, for example.
+
+```java
+
+    blueTheme = new StyleBuilder(this, R.style.Title)
+            .setTextColor(null, Color.BLUE)
+            .setBackgroundColor(Color.TRANSPARENT)
+            .setTypeface("ROBOTO_BOLD")
+            .setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
+            .build();
+            
 ```
 
 > Note: This library is *NOT* intended to replace the existing Android system for creating `Themes` as XML 
