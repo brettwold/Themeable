@@ -13,6 +13,7 @@ public interface StyleableConstants {
     int textStyle = 2;
     int textColor = 3;
     int textAllCaps = 4;
+    int textColorHighlight = 5;
 
     int backgroundColor = 10;
 }

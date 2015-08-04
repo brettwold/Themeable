@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
+import themeable.ThemeableFonts;
+
 /**
  * Created by brett on 31/07/15.
  */
@@ -15,9 +17,16 @@ public class StyleOverride {
 
     private SparseIntArray integerOverrides = new SparseIntArray();
     private SparseArray<ColorStateListWrapper> colorStateListOverrides = new SparseArray<ColorStateListWrapper>();
+    private SparseArray<Drawable> drawables = new SparseArray<Drawable>();
+    private SparseArray<String> fonts = new SparseArray<String>();
+    private SparseIntArray dimensions = new SparseIntArray();
 
     public StyleOverride(int styleResId) {
         this.styleResId = styleResId;
+    }
+
+    public int getStyleResourceId() {
+        return styleResId;
     }
 
     public void setColor(int resid, int color) {
@@ -42,13 +51,33 @@ public class StyleOverride {
         colorStateListOverrides.put(resid, colorStateList);
     }
 
-    public int getStyleResourceId() {
-        return styleResId;
-    }
-
     public Drawable getDrawable(int resid) {
-        return null;
+        return drawables.get(resid);
     }
 
+    public void setDrawable(int resid, Drawable drawable) {
+        drawables.put(resid, drawable);
+    }
+
+    public void setTypeface(int resid, String fontName) {
+        if(ThemeableFonts.hasFont(fontName)) {
+            fonts.put(resid, fontName);
+        }
+    }
+
+    public String getTypeface(int resid) {
+        return fonts.get(resid);
+    }
+
+    public void setDimensionPixelSize(int resid, int size) {
+        dimensions.put(resid, size);
+    }
+
+    public int getDimensionPixelSize(int resid, int defaultValue) {
+        if(dimensions.indexOfKey(resid) >= 0) {
+            return dimensions.get(resid);
+        }
+        return defaultValue;
+    }
 
 }

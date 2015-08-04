@@ -3,7 +3,6 @@ package themeable.internal;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.util.List;
@@ -46,9 +45,7 @@ public class CodeGenerator {
                         .addParameter(ClassName.get("android.view", "View"), "view");
 
         MethodSpec.Builder notify = methodBuilder("notifyStyleChange")
-                        .addModifiers(PUBLIC)
-                        .addParameter(TypeName.INT, "resid");
-
+                        .addModifiers(PUBLIC);
 
         builder.addField(builder(targetCls, "target", PRIVATE).build());
         bind.addStatement(addSetTarget());

@@ -1,13 +1,13 @@
 package themeable.widget;
 
-import android.widget.TextView;
+import android.widget.Button;
 
 /**
  * Created by brett on 03/08/15.
  */
 public class ThemeableButton extends ThemeableTextView {
-    public ThemeableButton(TextView textView, int styleResId) {
-        super(textView, styleResId);
+
+    public ThemeableButton(Button button, int styleResId) {
+        super(button, styleResId);
     }
-    
 }

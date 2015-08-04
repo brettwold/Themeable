@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="@string/themeable_title"
         android:id="@+id/title_text"
         android:layout_gravity="center_horizontal"
         style="@style/Title"/>
@@ -16,9 +16,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="@string/themeable_demo_desc"
         android:id="@+id/another_text_view"
         android:layout_gravity="center_horizontal"
+        android:gravity="center"
         style="@style/PlainText"/>
 
     <Button
