@@ -3,7 +3,6 @@ package themeable.res;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ public class StateListColourDrawableBuilder {
     }
 
     public Drawable getDrawable() {
-        Log.d("XXX", "building SLD");
         StateListDrawable sld = new StateListDrawable();
         for (StateColour stateColour : stateColoursList) {
             sld.addState(stateColour.states, new ColorDrawable(stateColour.colour));
