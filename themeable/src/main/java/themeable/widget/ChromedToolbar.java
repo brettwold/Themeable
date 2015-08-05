@@ -2,7 +2,6 @@ package themeable.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.Toolbar;
 
 import themeable.MaterialPalette;
@@ -18,12 +17,9 @@ public class ChromedToolbar extends ChromedView {
 
     private Toolbar toolbar;
 
-    private Drawable background;
-
     public ChromedToolbar(Toolbar toolbar) {
         super(toolbar);
         this.toolbar = toolbar;
-        this.background = toolbar.getBackground();
     }
 
     @Override
@@ -32,6 +28,7 @@ public class ChromedToolbar extends ChromedView {
         if(palette != null) {
             toolbar.setBackgroundColor(palette.getPrimaryColor());
             toolbar.setTitleTextColor(palette.getTextIconsColor());
+            toolbar.setSubtitleTextColor(palette.getTextSecondaryColor());
         } else {
             restore();
         }
@@ -42,11 +39,5 @@ public class ChromedToolbar extends ChromedView {
         int[] attrs = ResourceUtils.getResourceDeclareStyleableIntArray(context, "Theme");
         TypedArray typedArray = context.obtainStyledAttributes(android.R.style.Theme, attrs);
         toolbar.setBackgroundColor(typedArray.getColor(colorPrimary, 0));
-
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//            toolbar.setBackground(background);
-//        } else {
-//            toolbar.setBackgroundDrawable(background);
-//        }
     }
 }
