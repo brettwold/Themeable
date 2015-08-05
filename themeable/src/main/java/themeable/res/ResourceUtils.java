@@ -26,4 +26,19 @@ public class ResourceUtils {
 
         return null;
     }
+
+    public static final int getResourceDeclareStyleableInt(Context context, String name) {
+        try {
+            Class cls = Class.forName(context.getPackageName() + ".R$styleable");
+            Field f = cls.getField(name);
+            if(f != null) {
+                int ret = (int)f.get(null);
+                return ret;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to get resource declared int", e);
+        }
+
+        return 0;
+    }
 }

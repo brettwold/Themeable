@@ -16,6 +16,6 @@ public class ThemeableViewFactory {
         } else if (TextView.class.isAssignableFrom(cls)) {
             return new ThemeableTextView((TextView) target, styleResId);
         }
-        return null;
+        return new ThemeableView(target, styleResId);
     }
 }

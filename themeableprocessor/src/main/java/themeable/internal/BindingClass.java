@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.lang.model.element.Element;
 
+import themeable.BindChrome;
 import themeable.BindStyle;
 
 /**
@@ -39,7 +40,14 @@ public class BindingClass {
     public String getTargetClass() { return targetClass; }
 
     public void addStyleBinding(BindStyle annotation, Element element) {
-        Binding binding = new Binding();
+        Binding<BindStyle> binding = new Binding<BindStyle>(BindStyle.class);
+        binding.setAnnotation(annotation);
+        binding.setElement(element);
+        bindings.add(binding);
+    }
+
+    public void addChromeBinding(BindChrome annotation, Element element) {
+        Binding<BindChrome> binding = new Binding<BindChrome>(BindChrome.class);
         binding.setAnnotation(annotation);
         binding.setElement(element);
         bindings.add(binding);

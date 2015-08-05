@@ -3,6 +3,7 @@ ext {
     butterKnifeVersion = '6.1.0'
     recyclerViewVersion = '22.1.1'
     supportLibrary = '22.1.1'
+    supportAnnotationLibrary = '22.2.1'
     designLibrary = '22.2.0'
     daggerVersion = '2.0.1'
     spongycastleVersion = '1.51.0.0'
@@ -29,7 +30,7 @@ ext {
             recyclerView     : "com.android.support:recyclerview-v7:$recyclerViewVersion",
             cardView         : "com.android.support:cardview-v7:$supportLibrary",
             appCompat        : "com.android.support:appcompat-v7:$supportLibrary",
-            supportAnnotation: "com.android.support:support-annotations:$supportLibrary",
+            supportAnnotation: "com.android.support:support-annotations:$supportAnnotationLibrary",
             design           : "com.android.support:design:$designLibrary",
     ]
 

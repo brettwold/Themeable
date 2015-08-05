@@ -10,16 +10,27 @@ buildscript {
     }
 }
 
+
 apply from: 'dependencies.gradle'
 
 allprojects {
     apply plugin: 'jacoco'
 
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def platform_keystore_path = properties.getProperty('platform_keystore_path')
+    def platform_key_password = properties.getProperty('platform_key_password')
+    def keystore_path = properties.getProperty('keystore_path')
+    def keystore_key_password = properties.getProperty('keystore_key_password')
+    def sdkDir = properties.getProperty('sdk.dir')
+
     repositories {
+        jcenter()
         mavenCentral()
         maven {
             url 'https://oss.sonatype.org/content/repositories/snapshots/'
         }
+        maven { url "${sdkDir}/extras/android/m2repository" }
     }
 
     jacoco {
@@ -66,7 +77,7 @@ allprojects {
 
     task customSigning(type: Exec, dependsOn: 'assembleRelease') {
         doFirst {
-            if (!rootProject.hasProperty('keystore_path')) {
+            if (!"${keystore_path}") {
                 throw new InvalidUserDataException('Missing path to the customSigning keystore.');
             } else if (file("build/outputs/apk/${project.name}-release-unsigned.apk").exists()) {
                 executable "jarsigner"
@@ -79,7 +90,7 @@ allprojects {
 
     task customPlatformSigning(type: Exec, dependsOn: 'assembleRelease') {
         doFirst {
-            if (!rootProject.hasProperty('keystore_path')) {
+            if (!"${keystore_path}") {
                 throw new InvalidUserDataException('Missing path to the customSigning keystore.');
             } else if (file("build/outputs/apk/${project.name}-release-unsigned.apk").exists()) {
                 executable "jarsigner"

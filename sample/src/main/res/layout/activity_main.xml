@@ -1,58 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_content"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    android:layout_margin="@dimen/activity_horizontal_margin">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
         android:layout_height="wrap_content"
-        android:text="@string/themeable_title"
-        android:id="@+id/title_text"
-        android:layout_gravity="center_horizontal"
-        style="@style/Title"/>
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:theme="@style/AppTheme"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/themeable_demo_desc"
-        android:id="@+id/another_text_view"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        style="@style/PlainText"/>
-
-    <Button
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Red"
-        android:id="@+id/button_red"
-        android:layout_gravity="center_horizontal"
-        style="@style/ButtonFull"/>
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/activity_horizontal_margin">
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Green"
-        android:id="@+id/button_green"
-        android:layout_gravity="center_horizontal"
-        style="@style/ButtonFull"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/themeable_title"
+            android:id="@+id/title_text"
+            android:layout_gravity="center_horizontal"
+            style="@style/Title"/>
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Blue"
-        android:id="@+id/button_blue"
-        android:layout_gravity="center_horizontal"
-        style="@style/ButtonPrimary"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/themeable_demo_desc"
+            android:id="@+id/another_text_view"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            style="@style/PlainText"/>
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Restore"
-        android:id="@+id/button_restore"
-        android:layout_gravity="center_horizontal"
-        style="@style/ButtonFull"/>
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Red"
+            android:id="@+id/button_red"
+            android:layout_gravity="center_horizontal"
+            style="@style/ButtonFull"/>
 
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Green"
+            android:id="@+id/button_green"
+            android:layout_gravity="center_horizontal"
+            style="@style/ButtonFull"/>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Blue"
+            android:id="@+id/button_blue"
+            android:layout_gravity="center_horizontal"
+            style="@style/ButtonFull"/>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Restore"
+            android:id="@+id/button_restore"
+            android:layout_gravity="center_horizontal"
+            style="@style/ButtonPrimary"/>
+
+    </LinearLayout>
 
 </LinearLayout>

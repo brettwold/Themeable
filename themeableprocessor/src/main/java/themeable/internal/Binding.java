@@ -2,21 +2,28 @@ package themeable.internal;
 
 import javax.lang.model.element.Element;
 
-import themeable.BindStyle;
-
 /**
  * Created by brett on 30/07/15.
  */
-public class Binding {
+public class Binding<T> {
 
-    private BindStyle annotation;
+    private T annotation;
     private Element element;
+    private Class<T> type;
 
-    public BindStyle getAnnotation() {
+    public Binding(Class<T> type) {
+        this.type = type;
+    }
+
+    public Class<T> getType() {
+        return type;
+    }
+
+    public T getAnnotation() {
         return annotation;
     }
 
-    public void setAnnotation(BindStyle annotation) {
+    public void setAnnotation(T annotation) {
         this.annotation = annotation;
     }
 

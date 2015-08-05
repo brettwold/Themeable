@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/Themeable.iml" filepath="$PROJECT_DIR$/Themeable.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/themeable/themeable.iml" filepath="$PROJECT_DIR$/themeable/themeable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/themeable/themeable.iml" filepath="$PROJECT_DIR$/themeable/themeable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/themeableprocessor/themeableprocessor.iml" filepath="$PROJECT_DIR$/themeableprocessor/themeableprocessor.iml" />
       <module fileurl="file://$PROJECT_DIR$/themeableprocessor/themeableprocessor.iml" filepath="$PROJECT_DIR$/themeableprocessor/themeableprocessor.iml" />
     </modules>
   </component>

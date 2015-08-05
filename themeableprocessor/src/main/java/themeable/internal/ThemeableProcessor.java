@@ -4,7 +4,6 @@ import com.google.auto.service.AutoService;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,6 +25,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVariable;
 import javax.lang.model.util.Elements;
 
+import themeable.BindChrome;
 import themeable.BindStyle;
 
 import static javax.lang.model.element.ElementKind.INTERFACE;
@@ -75,15 +75,11 @@ public class ThemeableProcessor extends AbstractProcessor {
 
                 try {
                     String packageName = bindingClass.getPackageName();
-
                     TypeSpec generatedClass = CodeGenerator.generateClass(bindingClass);
-
                     JavaFile javaFile = JavaFile.builder(packageName, generatedClass).build();
                     javaFile.writeTo(processingEnv.getFiler());
 
-                } catch (ClassNotFoundException e) {
-                    messager.printMessage(ERROR, String.format("Unable to write view binder for type %s: %s", typeElement, e.getMessage()));
-                } catch (IOException e) {
+                } catch (Exception e) {
                     messager.printMessage(ERROR, String.format("Unable to write view binder for type %s: %s", typeElement, e.getMessage()));
                 }
             }
@@ -95,36 +91,61 @@ public class ThemeableProcessor extends AbstractProcessor {
     private Map<TypeElement, BindingClass> findAndParseTargets(RoundEnvironment env) {
         Map<TypeElement, BindingClass> targetClassMap = new LinkedHashMap<>();
 
-        Set<? extends Element> elements = env.getElementsAnnotatedWith(BindStyle.class);
-        for(Element element : elements) {
+        Set<? extends Element> styleElements = env.getElementsAnnotatedWith(BindStyle.class);
+        for(Element element : styleElements) {
+            if (bindStyle(targetClassMap, element)) return null;
+        }
 
-            boolean hasError = false;
-            TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
-
-            // Verify that the target type extends from View.
-            TypeMirror elementType = element.asType();
-            if (elementType.getKind() == TypeKind.TYPEVAR) {
-                TypeVariable typeVariable = (TypeVariable) elementType;
-                elementType = typeVariable.getUpperBound();
-            }
-
-            if (!isSubtypeOfType(elementType, VIEW_TYPE) && !isInterface(elementType)) {
-                messager.printMessage(ERROR, String.format("@%s fields must extend from View or be an interface. (%s.%s)",
-                        BindStyle.class.getSimpleName(), enclosingElement.getQualifiedName(), element.getSimpleName()), element);
-                hasError = true;
-            }
-
-
-            if(hasError) {
-               return null;
-            }
-
-            BindStyle binding = element.getAnnotation(BindStyle.class);
-            BindingClass bindingClass = getOrCreateTargetClass(targetClassMap, enclosingElement);
-            bindingClass.addStyleBinding(binding, element);
+        Set<? extends Element> chromeElements = env.getElementsAnnotatedWith(BindChrome.class);
+        for(Element element : chromeElements) {
+            if (bindChrome(targetClassMap, element)) return null;
         }
 
         return targetClassMap;
+    }
+
+
+    private boolean bindChrome(Map<TypeElement, BindingClass> targetClassMap, Element element) {
+        boolean hasError = false;
+        TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
+
+        if (verifyValidViewElement(element, hasError, enclosingElement, BindChrome.class.getSimpleName())) return true;
+
+        BindChrome binding = element.getAnnotation(BindChrome.class);
+        BindingClass bindingClass = getOrCreateTargetClass(targetClassMap, enclosingElement);
+        bindingClass.addChromeBinding(binding, element);
+        return false;
+    }
+
+    private boolean bindStyle(Map<TypeElement, BindingClass> targetClassMap, Element element) {
+        boolean hasError = false;
+        TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
+
+        if (verifyValidViewElement(element, hasError, enclosingElement, BindStyle.class.getSimpleName())) return true;
+
+        BindStyle binding = element.getAnnotation(BindStyle.class);
+        BindingClass bindingClass = getOrCreateTargetClass(targetClassMap, enclosingElement);
+        bindingClass.addStyleBinding(binding, element);
+        return false;
+    }
+
+    private boolean verifyValidViewElement(Element element, boolean hasError, TypeElement enclosingElement, String className) {
+        TypeMirror elementType = element.asType();
+        if (elementType.getKind() == TypeKind.TYPEVAR) {
+            TypeVariable typeVariable = (TypeVariable) elementType;
+            elementType = typeVariable.getUpperBound();
+        }
+
+        if (!isSubtypeOfType(elementType, VIEW_TYPE) && !isInterface(elementType)) {
+            messager.printMessage(ERROR, String.format("@%s fields must extend from View or be an interface. (%s.%s)",
+                    className, enclosingElement.getQualifiedName(), element.getSimpleName()), element);
+            hasError = true;
+        }
+
+        if(hasError) {
+            return true;
+        }
+        return false;
     }
 
     private BindingClass getOrCreateTargetClass(Map<TypeElement, BindingClass> targetClassMap, TypeElement enclosingElement) {

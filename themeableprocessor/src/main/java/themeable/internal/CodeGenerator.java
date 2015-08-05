@@ -5,6 +5,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,8 +13,11 @@ import javax.lang.model.element.Element;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 
+import themeable.BindChrome;
 import themeable.BindStyle;
 import themeable.StyleBinder;
+import themeable.widget.ChromeOverride;
+import themeable.widget.ChromedViewFactory;
 import themeable.widget.ThemeableViewFactory;
 import themeable.widget.ViewOverride;
 
@@ -44,42 +48,65 @@ public class CodeGenerator {
                         .addParameter(targetCls, "target")
                         .addParameter(ClassName.get("android.view", "View"), "view");
 
-        MethodSpec.Builder notify = methodBuilder("notifyStyleChange")
+        MethodSpec.Builder notifyStyle = methodBuilder("notifyStyleChange")
                         .addModifiers(PUBLIC);
 
+        MethodSpec.Builder notifyChrome = methodBuilder("notifyChromeChange")
+                .addModifiers(PUBLIC);
+
+        ParameterizedTypeName arList = ParameterizedTypeName.get(ClassName.get(ArrayList.class), ClassName.get(ChromeOverride.class));
         builder.addField(builder(targetCls, "target", PRIVATE).build());
+        builder.addField(builder(arList, "chromeBindings", PRIVATE).build());
+
         bind.addStatement(addSetTarget());
+        bind.addStatement(addCreateChromeBindings(), arList);
+
+        notifyChrome.addStatement(addChromeLoopNotify());
 
         Set<Binding> bindings = bindingClass.getStyleBindings();
-        System.out.println("Got bindings: " + bindings.size());
         for (Binding binding : bindings) {
-            int[] resIds = binding.getAnnotation().resourceIds();
-            if(resIds != null && resIds.length > 0) {
-                builder.addField(builder(ParameterizedTypeName.get(ClassName.get(List.class), ClassName.get(ViewOverride.class)),
-                        binding.getElement().getSimpleName() + "ViewOverride", PRIVATE).build());
 
-                bind.addStatement(binding.getElement().getSimpleName() + "ViewOverride = new $T<>()", ClassName.get("java.util", "ArrayList"));
-
-                for(int resId : resIds) {
-                    bind.addStatement(addFindView(binding, resId));
-                    bind.addStatement(addAddViewOverride(binding, resId), ClassName.get(ThemeableViewFactory.class));
-                }
-                notify.addStatement(addLoopNotify(binding));
-            } else {
-                builder.addField(builder(ClassName.get(ViewOverride.class), binding.getElement().getSimpleName() + "ViewOverride", PRIVATE).build());
-
-                bind.addStatement(addSetupViewOverride(binding), ClassName.get(ThemeableViewFactory.class));
-                notify.addStatement(addNotify(binding));
+            Class bindingCls = binding.getType();
+            if(BindStyle.class.isAssignableFrom(bindingCls)) {
+                addStyleBinding(builder, bind, notifyStyle, (Binding<BindStyle>)binding);
+            } else if(BindChrome.class.isAssignableFrom(bindingCls)) {
+                addChromeBinding(builder, bind, (Binding<BindChrome>)binding);
             }
         }
 
         builder.addMethod(bind.build());
-        builder.addMethod(notify.build());
+        builder.addMethod(notifyStyle.build());
+        builder.addMethod(notifyChrome.build());
 
         return builder.build();
     }
 
-    private static String addAddViewOverride(Binding binding, int resid) {
+    private static void addChromeBinding(TypeSpec.Builder builder, MethodSpec.Builder bind, Binding<BindChrome> binding) {
+        bind.addStatement(addChrome(binding), ClassName.get(ChromedViewFactory.class));
+    }
+
+    private static void addStyleBinding(TypeSpec.Builder builder, MethodSpec.Builder bind, MethodSpec.Builder notify, Binding<BindStyle> binding) {
+        int[] resIds = binding.getAnnotation().resourceIds();
+        if (resIds != null && resIds.length > 0) {
+            builder.addField(builder(ParameterizedTypeName.get(ClassName.get(List.class), ClassName.get(ViewOverride.class)),
+                    binding.getElement().getSimpleName() + "ViewOverride", PRIVATE).build());
+
+            bind.addStatement(binding.getElement().getSimpleName() + "ViewOverride = new $T<>()", ClassName.get("java.util", "ArrayList"));
+
+            for (int resId : resIds) {
+                bind.addStatement(addFindView(binding, resId));
+                bind.addStatement(addAddViewOverride(binding, resId), ClassName.get(ThemeableViewFactory.class));
+            }
+            notify.addStatement(addLoopNotify(binding));
+        } else {
+            builder.addField(builder(ClassName.get(ViewOverride.class), binding.getElement().getSimpleName() + "ViewOverride", PRIVATE).build());
+
+            bind.addStatement(addSetupViewOverride(binding), ClassName.get(ThemeableViewFactory.class));
+            notify.addStatement(addNotify(binding));
+        }
+    }
+
+    private static String addAddViewOverride(Binding<BindStyle> binding, int resid) {
         BindStyle annotation = binding.getAnnotation();
         Element element = binding.getElement();
 
@@ -98,7 +125,7 @@ public class CodeGenerator {
         return statement.toString();
     }
 
-    private static String addFindView(Binding binding, int resid) {
+    private static String addFindView(Binding<BindStyle> binding, int resid) {
         Element element = binding.getElement();
         TypeMirror elementType = element.asType();
         DeclaredType declaredType = (DeclaredType) elementType;
@@ -117,7 +144,7 @@ public class CodeGenerator {
         return statement.toString();
     }
 
-    private static String addSetupViewOverride(Binding binding) {
+    private static String addSetupViewOverride(Binding<BindStyle> binding) {
 
         BindStyle annotation = binding.getAnnotation();
         Element element = binding.getElement();
@@ -135,7 +162,7 @@ public class CodeGenerator {
         return statement.toString();
     }
 
-    private static String addSetResourceId(Binding binding) {
+    private static String addSetResourceId(Binding<BindStyle> binding) {
         BindStyle annotation = binding.getAnnotation();
 
         int styleResId = annotation.value();
@@ -151,7 +178,13 @@ public class CodeGenerator {
         return statement.toString();
     }
 
-    private static String addNotify(Binding binding) {
+    private static String addCreateChromeBindings() {
+        StringBuilder statement = new StringBuilder();
+        statement.append("this.chromeBindings = new $T();");
+        return statement.toString();
+    }
+
+    private static String addNotify(Binding<BindStyle> binding) {
 
         Element element = binding.getElement();
 
@@ -161,7 +194,7 @@ public class CodeGenerator {
         return statement.toString();
     }
 
-    private static String addLoopNotify(Binding binding) {
+    private static String addLoopNotify(Binding<BindStyle> binding) {
         Element element = binding.getElement();
 
         StringBuilder statement = new StringBuilder();
@@ -171,4 +204,24 @@ public class CodeGenerator {
 
         return statement.toString();
     }
+
+    private static String addChromeLoopNotify() {
+        StringBuilder statement = new StringBuilder();
+        statement.append("for(ChromeOverride co : chromeBindings )")
+                .append("{ co.overrideAppearance(); }");
+
+        return statement.toString();
+    }
+
+    private static String addChrome(Binding<BindChrome> binding) {
+        Element element = binding.getElement();
+
+        StringBuilder statement = new StringBuilder();
+        statement.append("chromeBindings.add($T.getChromeOverride(target.")
+                .append(element.getSimpleName())
+                .append("))");
+
+        return statement.toString();
+    }
+
 }

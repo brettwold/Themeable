@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
+import android.support.annotation.ColorInt;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.widget.Button;
@@ -42,7 +43,7 @@ public class StyleBuilder implements StyleableConstants {
      * @param color The colour
      * @return StyleBuilder
      */
-    public StyleBuilder setTextColor(int[] states, int color) {
+    public StyleBuilder setTextColor(int[] states, @ColorInt int color) {
         ColorStateListWrapper colors = overrideAppearance.getColorStateList(textColor);
         if(colors == null) {
             ColorStateList colorStateList = originalTextAppearance.getColorStateList(textColor);
@@ -58,7 +59,7 @@ public class StyleBuilder implements StyleableConstants {
      * @param color The color to override
      * @return StyleBuilder
      */
-    public StyleBuilder setBackgroundColor(int color) {
+    public StyleBuilder setBackgroundColor(@ColorInt int color) {
         overrideAppearance.setColor(backgroundColor, color);
         return this;
     }
@@ -81,7 +82,7 @@ public class StyleBuilder implements StyleableConstants {
         return this;
     }
 
-    public StyleBuilder setTextColorHighlight(int color) {
+    public StyleBuilder setTextColorHighlight(@ColorInt int color) {
         overrideAppearance.setColor(textColorHighlight, color);
         return this;
     }

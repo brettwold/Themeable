@@ -1,6 +1,7 @@
 package themeable.res;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
@@ -39,7 +40,7 @@ public class StyleOverride {
         return integerOverrides.indexOfKey(resid) >= 0 || drawables.indexOfKey(resid) >= 0 || builders.indexOfKey(resid) >= 0;
     }
 
-    public int getColor(int resid, int defaultColor) {
+    public int getColor(int resid, @ColorInt int defaultColor) {
         if(integerOverrides.indexOfKey(resid) >= 0) {
             return integerOverrides.get(resid);
         }

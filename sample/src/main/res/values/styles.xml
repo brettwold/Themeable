@@ -1,6 +1,9 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/toolbar</item>
+        <item name="android:windowBackground">@color/background</item>
     </style>
 
     <style name="Title" parent="@android:style/TextAppearance.Large">

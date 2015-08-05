@@ -2,14 +2,15 @@
 <resources>
 
     <color name="transparent">#00000000</color>
+    <color name="toolbar">#ff808080</color>
     <color name="background">#fff1f1f1</color>
     <color name="default_title_text">#ff000000</color>
     <color name="default_text">#ff333333</color>
 
     <color name="default_button_text">#ffffffff</color>
-    <color name="default_button_background">#ff858D99</color>
-    <color name="default_button_background_pressed">#ffB1B8C8</color>
-    <color name="default_button_background_disabled">#88858D99</color>
+    <color name="default_button_background">#ff808080</color>
+    <color name="default_button_background_pressed">#ffB1B1B1</color>
+    <color name="default_button_background_disabled">#88858585</color>
 
     <color name="primary_button_background">#ff83B337</color>
     <color name="primary_button_background_pressed">#ffa8ca73</color>
