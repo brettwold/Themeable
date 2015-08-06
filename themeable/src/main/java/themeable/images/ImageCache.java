@@ -8,13 +8,13 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import themeable.Themeable;
+import themeable.res.ImageOverride;
 
 /**
  * Created by brett on 06/08/15.
@@ -24,24 +24,25 @@ public class ImageCache {
     private static final String TAG = ImageCache.class.getSimpleName();
     private static final String DOWNLOADS_FOLDER = Environment.getExternalStorageDirectory() + "/Downloads/ThemeableImages";
 
-    public static Map<String, Set<ImageView>> imageViewKeyMap = new HashMap<>();
+    private static Map<String, Set<ImageView>> imageViewKeyMap = new HashMap<>();
 
     public static void applyImages(Themeable.Theme theme) {
 
-        Collection<String> keys = theme.getImageKeys();
-        for (final String key: keys) {
+        Set<ImageOverride> imageOverrides = theme.getImageOverrides();
+        for (final ImageOverride imageOverride: imageOverrides) {
+            String key = imageOverride.getKey();
             if (ImageCache.hasKey(key)) {
                 File imageFile = getImageFile(key, theme);
                 if (imageFile.exists()) {
-                    setImageViews(key, imageFile);
+                    setImageViews(imageOverride, imageFile);
                 } else {
                     AsyncFileDownloader downloader = new AsyncFileDownloader();
-                    String url = theme.getImageUrl(key);
+                    String url = imageOverride.getUrl();
                     if(url != null) {
                         downloader.downloadFile(url, imageFile.getAbsolutePath(), new AsyncFileDownloader.Callback() {
                             @Override
                             public void onCompleted(final File downloadedFile) {
-                                setImageViews(key, downloadedFile);
+                                setImageViews(imageOverride, downloadedFile);
                             }
 
                             @Override
@@ -56,11 +57,13 @@ public class ImageCache {
     }
 
     public static void restore(Themeable.Theme theme) {
-        for(String key : imageViewKeyMap.keySet()) {
-            if(theme.hasImageRestoreId(key)) {
+        Set<ImageOverride> imageOverrides = theme.getImageOverrides();
+        for (ImageOverride imageOverride: imageOverrides) {
+            final String key = imageOverride.getKey();
+            if(imageOverride.hasRestoreId()) {
                 Set<ImageView> views = imageViewKeyMap.get(key);
                 for (ImageView view : views) {
-                    view.setImageResource(theme.getImageRestoreId(key));
+                    view.setImageResource(imageOverride.getRestoreId());
                 }
             }
         }
@@ -98,19 +101,11 @@ public class ImageCache {
     }
 
     @Nullable
-    private static void setImageViews(String key, File imageFile) {
-
-        int maxWidth = 0;
-        int maxHeight = 0;
-        Set<ImageView> views = getImageViews(key);
-        for(ImageView view : views) {
-            int vh = view.getHeight();
-            int vw = view.getWidth();
-            if(vh > maxHeight) { maxHeight = vh; }
-            if(vw > maxWidth) { maxWidth = vw; }
-        }
-
+    private static void setImageViews(ImageOverride imageOverride, File imageFile) {
         if (imageFile != null && imageFile.exists()) {
+            String key = imageOverride.getKey();
+            int maxWidth = imageOverride.getMaxWidthPixels();
+            int maxHeight = imageOverride.getMaxHeightPixels();
             Bitmap bitmap = decodeSampledBitmapFromResource(imageFile.getAbsolutePath(), maxWidth, maxHeight);
             setImageBitmap(key, bitmap);
         }

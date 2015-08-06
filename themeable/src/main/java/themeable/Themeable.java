@@ -2,18 +2,16 @@ package themeable;
 
 import android.support.annotation.StyleRes;
 import android.util.Log;
-import android.util.Patterns;
 import android.util.SparseArray;
 import android.view.View;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 import themeable.images.ImageCache;
+import themeable.res.ImageOverride;
 import themeable.res.StyleOverride;
 
 public class Themeable {
@@ -177,8 +175,7 @@ public class Themeable {
         private String themeName;
         private MaterialPalette palette;
         private Set<StyleOverride> overrides = new HashSet<>();
-        private Map<String, String> images = new HashMap<>();
-        private Map<String, Integer> imageRestoreMap = new HashMap<>();
+        private Set<ImageOverride> imageOverrides = new HashSet<>();
 
         public static Theme newInstance(String themeName) {
             return new Theme(themeName);
@@ -210,6 +207,11 @@ public class Themeable {
             return this;
         }
 
+        public Theme addImage(ImageOverride imageOverride) {
+            imageOverrides.add(imageOverride);
+            return this;
+        }
+
         public MaterialPalette getPalette() {
             return palette;
         }
@@ -218,38 +220,8 @@ public class Themeable {
             return overrides;
         }
 
-        public Theme addImage(String key, String url, int restoreId) {
-            if(key == null) {
-                throw new IllegalArgumentException("Key cannot be null");
-            }
-
-            if(url == null || !Patterns.WEB_URL.matcher(url).matches()) {
-                throw new IllegalArgumentException("Invalid or null URL passed to addImage");
-            }
-
-            images.put(key, url);
-            imageRestoreMap.put(key, restoreId);
-            return this;
-        }
-
-        public boolean hasImage(String key) {
-            return images.containsKey(key);
-        }
-
-        public Collection<String> getImageKeys() {
-            return images.keySet();
-        }
-
-        public String getImageUrl(String key) {
-            return images.get(key);
-        }
-
-        public boolean hasImageRestoreId(String key) {
-            return imageRestoreMap.containsKey(key);
-        }
-
-        public int getImageRestoreId(String key) {
-            return imageRestoreMap.get(key);
+        public Set<ImageOverride> getImageOverrides() {
+            return imageOverrides;
         }
     }
 }

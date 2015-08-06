@@ -21,6 +21,7 @@ import themeable.BindStyle;
 import themeable.MaterialPalette;
 import themeable.Themeable;
 import themeable.ThemeableFonts;
+import themeable.res.ImageBuilder;
 import themeable.res.StateListColourDrawableBuilder;
 import themeable.res.StyleBuilder;
 
@@ -114,7 +115,12 @@ public class MainActivity extends AppCompatActivity {
                         .setTypeface(INDIE_FLOWER)
                         .setTextAllCaps(true)
                         .build())
-                .addImage(KEY_LOGO, "https://s3-eu-west-1.amazonaws.com/designs.aevi-test.com/tempfiles/santander_logo.png", R.drawable.ic_adjust_black_48dp);
+                .addImage(new ImageBuilder(this, KEY_LOGO)
+                        .setUrl("https://s3-eu-west-1.amazonaws.com/designs.aevi-test.com/tempfiles/santander_logo.png")
+                        .setRestoreResourceId(R.drawable.ic_adjust_black_48dp)
+                        .setMaxHeight(TypedValue.COMPLEX_UNIT_SP, 120)
+                        .setMaxWidth(TypedValue.COMPLEX_UNIT_SP, 120)
+                        .build());
 
         blueTheme = Themeable.Theme.newInstance("MyBlueTheme")
                 .setPalette(bluePalette)
