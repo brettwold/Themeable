@@ -5,6 +5,43 @@ dependencies {
     compile 'com.google.android:android:4.1.1.4'
 
     compile presentationDependencies.supportAnnotation
+    compile domainDependencies.okHttp
 
+}
 
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['Themeable']
+    pkg {
+        repo = 'maven'
+        name = 'Themeable'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/brettwold/Themeable.git'
+        version {
+            name = "${project.version}"
+            desc = 'Themeable initial alpha release'
+            released  = new Date()
+            vcsTag = 'v0.1'
+        }
+    }
+}
+
+publishing {
+    publications {
+        Themeable(MavenPublication) {
+            groupId 'com.brettwold'
+            artifactId 'themeable'
+            version "${project.version}"
+            from components.java
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'repos'
+        }
+    }
 }

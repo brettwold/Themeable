@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import themeable.BindChrome;
+import themeable.BindImage;
 import themeable.BindStyle;
 import themeable.MaterialPalette;
 import themeable.Themeable;
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String ROBOTO_LIGHT = "RobotoLight";
     private static final String ROBOTO_THIN = "RobotoThin";
     private static final String INDIE_FLOWER = "IndieFlower";
+
+    private static final String KEY_LOGO = "logo";
 
     @BindStyle(R.style.Title)
     @InjectView(R.id.title_text)
@@ -55,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
     @InjectView(R.id.main_content)
     LinearLayout mainContent;
 
+    @BindImage(KEY_LOGO)
+    @InjectView(R.id.image_replace)
+    ImageView imageView;
+
     Themeable.Theme redTheme, blueTheme, greenTheme;
 
     @Override
@@ -74,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
         ThemeableFonts.registerTypeface(INDIE_FLOWER, "fonts/IndieFlower.ttf");
 
 
-        String redLogoUrl = "http://ahjkajksj";
-
         MaterialPalette redPalette = MaterialPalette.build("#fff44336", "#ffd32f2f", "#ffffcdd2",
                 "#ffff9800", "#ff212121", "#ff727272", "#ffffffff", "#ffffffff");
 
@@ -86,17 +92,17 @@ public class MainActivity extends AppCompatActivity {
                 "#ff795548", "#ff212121", "#ff727272", "#ffffffff", "#ffcccccc");
 
 
-        redTheme = Themeable.Theme.newInstance(this)
+        redTheme = Themeable.Theme.newInstance("MyRedTheme")
                 .setPalette(redPalette)
                 .addStyle(new StyleBuilder(this, R.style.Title)
-                        .setTextColor(null, redPalette.getPrimaryColor())
-                        .setBackgroundColor(Color.TRANSPARENT)
-                        .setTypeface(INDIE_FLOWER)
-                        .setTextSize(TypedValue.COMPLEX_UNIT_SP, 48)
+                    .setTextColor(null, redPalette.getPrimaryColor())
+                    .setBackgroundColor(Color.TRANSPARENT)
+                    .setTypeface(INDIE_FLOWER)
+                        .setTextSize(TypedValue.COMPLEX_UNIT_SP, 38)
                         .setTextAllCaps(false)
                         .build())
                 .addStyle(new StyleBuilder(this, R.style.ButtonFull)
-                        .setTextColor(null, redPalette.getTextIconsColor())
+                    .setTextColor(null, redPalette.getTextIconsColor())
                         .setBackground(new StateListColourDrawableBuilder(redPalette.getPrimaryColor())
                                 .addStateColour(new int[]{android.R.attr.state_pressed}, redPalette.getPrimaryDarkColor()))
                         .setTypeface(INDIE_FLOWER)
@@ -107,55 +113,62 @@ public class MainActivity extends AppCompatActivity {
                                 .addStateColour(new int[]{android.R.attr.state_pressed}, redPalette.getPrimaryDarkColor()))
                         .setTypeface(INDIE_FLOWER)
                         .setTextAllCaps(true)
-                        .build());
+                        .build())
+                .addImage(KEY_LOGO, "https://s3-eu-west-1.amazonaws.com/designs.aevi-test.com/tempfiles/santander_logo.png", R.drawable.ic_adjust_black_48dp);
 
-        blueTheme = Themeable.Theme.newInstance(this)
+        blueTheme = Themeable.Theme.newInstance("MyBlueTheme")
                 .setPalette(bluePalette)
                 .addStyle(new StyleBuilder(this, R.style.Title)
-                        .setBackgroundColor(Color.TRANSPARENT)
-                        .setTypeface(ROBOTO_BOLD)
-                        .setTextColor(null, bluePalette.getPrimaryColor())
-                        .setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
-                        .setTextAllCaps(true)
-                        .build())
+                    .setBackgroundColor(Color.TRANSPARENT)
+                    .setTypeface(ROBOTO_BOLD)
+                    .setTextColor(null, bluePalette.getPrimaryColor())
+                    .setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
+                    .setTextAllCaps(true)
+                    .build())
                 .addStyle(new StyleBuilder(this, R.style.ButtonFull)
-                        .setTextColor(null, bluePalette.getTextIconsColor())
-                        .setBackground(new StateListColourDrawableBuilder(bluePalette.getPrimaryColor())
-                                .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
-                        .setTypeface(ROBOTO_BOLD)
-                        .setTextAllCaps(true)
-                        .build())
+                    .setTextColor(null, bluePalette.getTextIconsColor())
+                    .setBackground(new StateListColourDrawableBuilder(bluePalette.getPrimaryColor())
+                            .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
+                    .setTypeface(ROBOTO_BOLD)
+                    .setTextAllCaps(true)
+                    .build())
                 .addStyle(new StyleBuilder(this, R.style.ButtonPrimary)
-                        .setTextColor(null, bluePalette.getTextIconsColor())
-                        .setBackground(new StateListColourDrawableBuilder(bluePalette.getAccentColor())
-                                .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
-                        .setTypeface(ROBOTO_BOLD)
-                        .setTextAllCaps(true)
-                        .build());
+                    .setTextColor(null, bluePalette.getTextIconsColor())
+                    .setBackground(new StateListColourDrawableBuilder(bluePalette.getAccentColor())
+                            .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
+                    .setTypeface(ROBOTO_BOLD)
+                    .setTextAllCaps(true)
+                    .build());
 
-        greenTheme = Themeable.Theme.newInstance(this)
+        greenTheme = Themeable.Theme.newInstance("MyGreenTheme")
                 .setPalette(greenPalette)
                 .addStyle(new StyleBuilder(this, R.style.Title)
-                        .setTextColor(null, greenPalette.getTextIconsColor())
-                        .setBackgroundColor(Color.TRANSPARENT)
-                        .setTypeface(ROBOTO_THIN)
-                        .setTextSize(TypedValue.COMPLEX_UNIT_SP, 30)
-                        .setTextAllCaps(false)
-                        .build())
+                    .setTextColor(null, greenPalette.getTextIconsColor())
+                    .setBackgroundColor(Color.TRANSPARENT)
+                    .setTypeface(ROBOTO_THIN)
+                    .setTextSize(TypedValue.COMPLEX_UNIT_SP, 30)
+                    .setTextAllCaps(false)
+                    .build())
                 .addStyle(new StyleBuilder(this, R.style.ButtonFull)
-                        .setTextColor(null, greenPalette.getTextIconsColor())
-                        .setBackground(new StateListColourDrawableBuilder(greenPalette.getPrimaryColor())
-                                .addStateColour(new int[]{android.R.attr.state_pressed}, greenPalette.getPrimaryLightColor()))
-                        .setTypeface(ROBOTO_LIGHT)
-                        .build())
-                    .addStyle(new StyleBuilder(this, R.style.ButtonPrimary)
-                        .setTextColor(null, greenPalette.getTextIconsColor())
-                        .setBackground(new StateListColourDrawableBuilder(greenPalette.getAccentColor())
-                                .addStateColour(new int[]{android.R.attr.state_pressed}, greenPalette.getPrimaryDarkColor()))
-                        .setTypeface(ROBOTO_LIGHT)
-                        .setTextAllCaps(true)
-                        .build());
+                    .setTextColor(null, greenPalette.getTextIconsColor())
+                    .setBackground(new StateListColourDrawableBuilder(greenPalette.getPrimaryColor())
+                            .addStateColour(new int[]{android.R.attr.state_pressed}, greenPalette.getPrimaryLightColor()))
+                    .setTypeface(ROBOTO_LIGHT)
+                    .build())
+                .addStyle(new StyleBuilder(this, R.style.ButtonPrimary)
+                    .setTextColor(null, greenPalette.getTextIconsColor())
+                    .setBackground(new StateListColourDrawableBuilder(greenPalette.getAccentColor())
+                            .addStateColour(new int[]{android.R.attr.state_pressed}, greenPalette.getPrimaryDarkColor()))
+                    .setTypeface(ROBOTO_LIGHT)
+                    .setTextAllCaps(true)
+                    .build());
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Themeable.unbind(this);
     }
 
     @OnClick({R.id.button_red, R.id.button_blue, R.id.button_green, R.id.button_restore})

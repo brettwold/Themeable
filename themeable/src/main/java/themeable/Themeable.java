@@ -1,16 +1,19 @@
 package themeable;
 
-import android.content.Context;
 import android.support.annotation.StyleRes;
 import android.util.Log;
+import android.util.Patterns;
 import android.util.SparseArray;
 import android.view.View;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import themeable.images.ImageCache;
 import themeable.res.StyleOverride;
 
 public class Themeable {
@@ -23,6 +26,7 @@ public class Themeable {
     private static final SparseArray<StyleOverride> overrides = new SparseArray<>();
 
     private static MaterialPalette palette;
+    private static Theme currentTheme;
 
     private static boolean bound = false;
 
@@ -45,14 +49,35 @@ public class Themeable {
     }
 
     /**
+     * Unbinds all objects previously bound.
+     * NOTE: This does NOT restore there previous styling
+     *
+     * @param source The object to scan for {@link @BindStyle} bindings
+     */
+    public static final void unbind(Object source) {
+        try {
+            StyleBinder styleBinder = findStyleBinderForClass(source.getClass());
+            styleBinder.unbind(source);
+            bound = true;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to find binding class", e);
+        }
+    }
+
+    /**
      * Applies a whole theme to all bound views at once
      *
      * @param theme The {@link themeable.Themeable.Theme} to apply
      */
     public static void applyTheme(Theme theme) {
+        if(currentTheme != null) {
+            ImageCache.restore(currentTheme);
+        }
+        currentTheme = theme;
         palette = theme.getPalette();
         notifyBindersChromeChange();
         applyStyles(theme.getOverrides().toArray(new StyleOverride[0]));
+        ImageCache.applyImages(theme);
     }
 
     /**
@@ -75,6 +100,9 @@ public class Themeable {
      * Removes all theming and styling
      */
     public static void removeTheme() {
+        if(currentTheme != null) {
+            ImageCache.restore(currentTheme);
+        }
         overrides.clear();
         palette = null;
         notifyBindersChromeChange();
@@ -96,6 +124,13 @@ public class Themeable {
             return;
         }
         throw new RuntimeException("Attempt to remove styles before Themeables are bound. bind() method must be called first");
+    }
+
+    /**
+     * Removes all images stored in the ImageCache so they will be forced to be re-loaded.
+     */
+    public static void clearImageCache() {
+        ImageCache.clear();
     }
 
     private static void notifyBindersStyleChange() {
@@ -139,16 +174,30 @@ public class Themeable {
 
     public static final class Theme {
 
-        private Context context;
+        private String themeName;
         private MaterialPalette palette;
         private Set<StyleOverride> overrides = new HashSet<>();
+        private Map<String, String> images = new HashMap<>();
+        private Map<String, Integer> imageRestoreMap = new HashMap<>();
 
-        public static Theme newInstance(Context context) {
-            return new Theme(context);
+        public static Theme newInstance(String themeName) {
+            return new Theme(themeName);
         }
 
-        private Theme(Context context) {
-            this.context = context;
+        private Theme(String themeName) {
+            if(themeName == null || themeName.isEmpty()) {
+                throw new IllegalArgumentException("Theme name cannot be null");
+            }
+
+            if(!themeName.matches("[a-zA-Z].*")) {
+                throw new IllegalArgumentException("Theme name should consist only of letters");
+            }
+
+            this.themeName = themeName;
+        }
+
+        public String getThemeName() {
+            return themeName;
         }
 
         public Theme setPalette(MaterialPalette palette) {
@@ -167,6 +216,40 @@ public class Themeable {
 
         public Set<StyleOverride> getOverrides() {
             return overrides;
+        }
+
+        public Theme addImage(String key, String url, int restoreId) {
+            if(key == null) {
+                throw new IllegalArgumentException("Key cannot be null");
+            }
+
+            if(url == null || !Patterns.WEB_URL.matcher(url).matches()) {
+                throw new IllegalArgumentException("Invalid or null URL passed to addImage");
+            }
+
+            images.put(key, url);
+            imageRestoreMap.put(key, restoreId);
+            return this;
+        }
+
+        public boolean hasImage(String key) {
+            return images.containsKey(key);
+        }
+
+        public Collection<String> getImageKeys() {
+            return images.keySet();
+        }
+
+        public String getImageUrl(String key) {
+            return images.get(key);
+        }
+
+        public boolean hasImageRestoreId(String key) {
+            return imageRestoreMap.containsKey(key);
+        }
+
+        public int getImageRestoreId(String key) {
+            return imageRestoreMap.get(key);
         }
     }
 }

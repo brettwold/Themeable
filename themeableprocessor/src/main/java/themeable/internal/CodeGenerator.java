@@ -14,8 +14,10 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 
 import themeable.BindChrome;
+import themeable.BindImage;
 import themeable.BindStyle;
 import themeable.StyleBinder;
+import themeable.images.ImageCache;
 import themeable.widget.ChromeOverride;
 import themeable.widget.ChromedViewFactory;
 import themeable.widget.ThemeableViewFactory;
@@ -48,8 +50,12 @@ public class CodeGenerator {
                         .addParameter(targetCls, "target")
                         .addParameter(ClassName.get("android.view", "View"), "view");
 
+        MethodSpec.Builder unbind = methodBuilder("unbind")
+                .addModifiers(PUBLIC)
+                .addParameter(targetCls, "target");
+
         MethodSpec.Builder notifyStyle = methodBuilder("notifyStyleChange")
-                        .addModifiers(PUBLIC);
+                .addModifiers(PUBLIC);
 
         MethodSpec.Builder notifyChrome = methodBuilder("notifyChromeChange")
                 .addModifiers(PUBLIC);
@@ -61,6 +67,8 @@ public class CodeGenerator {
         bind.addStatement(addSetTarget());
         bind.addStatement(addCreateChromeBindings(), arList);
 
+        unbind.addStatement(addRemoveChromeBindings());
+
         notifyChrome.addStatement(addChromeLoopNotify());
 
         Set<Binding> bindings = bindingClass.getStyleBindings();
@@ -71,14 +79,23 @@ public class CodeGenerator {
                 addStyleBinding(builder, bind, notifyStyle, (Binding<BindStyle>)binding);
             } else if(BindChrome.class.isAssignableFrom(bindingCls)) {
                 addChromeBinding(builder, bind, (Binding<BindChrome>)binding);
+            } else if(BindImage.class.isAssignableFrom(bindingCls)) {
+                addImageBinding(builder, bind, unbind, (Binding<BindImage>)binding);
             }
         }
 
         builder.addMethod(bind.build());
+        builder.addMethod(unbind.build());
         builder.addMethod(notifyStyle.build());
         builder.addMethod(notifyChrome.build());
 
         return builder.build();
+    }
+
+    private static String addRemoveChromeBindings() {
+        StringBuilder statement = new StringBuilder();
+        statement.append("if(this.chromeBindings != null) { this.chromeBindings.clear(); this.chromeBindings = null; }");
+        return statement.toString();
     }
 
     private static void addChromeBinding(TypeSpec.Builder builder, MethodSpec.Builder bind, Binding<BindChrome> binding) {
@@ -104,6 +121,15 @@ public class CodeGenerator {
             bind.addStatement(addSetupViewOverride(binding), ClassName.get(ThemeableViewFactory.class));
             notify.addStatement(addNotify(binding));
         }
+    }
+
+    private static void addImageBinding(TypeSpec.Builder builder, MethodSpec.Builder bind, MethodSpec.Builder unbind, Binding<BindImage> binding) {
+        BindImage annotation = binding.getAnnotation();
+        String key = annotation.value();
+
+        ClassName imageCache = ClassName.get(ImageCache.class);
+        bind.addStatement("$T.bind(target." + binding.getElement().getSimpleName() + ", \"" + key + "\")", imageCache);
+        unbind.addStatement("$T.unbind(target." + binding.getElement().getSimpleName() + ", \"" + key + "\")", imageCache);
     }
 
     private static String addAddViewOverride(Binding<BindStyle> binding, int resid) {

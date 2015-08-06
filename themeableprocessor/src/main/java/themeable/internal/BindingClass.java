@@ -3,11 +3,6 @@ package themeable.internal;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.lang.model.element.Element;
-
-import themeable.BindChrome;
-import themeable.BindStyle;
-
 /**
  * Created by brett on 30/07/15.
  */
@@ -39,17 +34,7 @@ public class BindingClass {
 
     public String getTargetClass() { return targetClass; }
 
-    public void addStyleBinding(BindStyle annotation, Element element) {
-        Binding<BindStyle> binding = new Binding<BindStyle>(BindStyle.class);
-        binding.setAnnotation(annotation);
-        binding.setElement(element);
-        bindings.add(binding);
-    }
-
-    public void addChromeBinding(BindChrome annotation, Element element) {
-        Binding<BindChrome> binding = new Binding<BindChrome>(BindChrome.class);
-        binding.setAnnotation(annotation);
-        binding.setElement(element);
+    public void addBinding(Binding binding) {
         bindings.add(binding);
     }
 

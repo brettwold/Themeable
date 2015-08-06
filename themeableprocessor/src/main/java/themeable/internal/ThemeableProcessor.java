@@ -26,6 +26,7 @@ import javax.lang.model.type.TypeVariable;
 import javax.lang.model.util.Elements;
 
 import themeable.BindChrome;
+import themeable.BindImage;
 import themeable.BindStyle;
 
 import static javax.lang.model.element.ElementKind.INTERFACE;
@@ -101,9 +102,29 @@ public class ThemeableProcessor extends AbstractProcessor {
             if (bindChrome(targetClassMap, element)) return null;
         }
 
+        Set<? extends Element> imageElements = env.getElementsAnnotatedWith(BindImage.class);
+        for(Element element : imageElements) {
+            if (bindImage(targetClassMap, element)) return null;
+        }
+
         return targetClassMap;
     }
 
+    private boolean bindImage(Map<TypeElement, BindingClass> targetClassMap, Element element) {
+        boolean hasError = false;
+        TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
+
+        if (verifyValidViewElement(element, hasError, enclosingElement, BindImage.class.getSimpleName())) return true;
+
+        BindImage bindingType = element.getAnnotation(BindImage.class);
+        Binding<BindImage> binding = new Binding<BindImage>(BindImage.class);
+        binding.setAnnotation(bindingType);
+        binding.setElement(element);
+
+        BindingClass bindingClass = getOrCreateTargetClass(targetClassMap, enclosingElement);
+        bindingClass.addBinding(binding);
+        return false;
+    }
 
     private boolean bindChrome(Map<TypeElement, BindingClass> targetClassMap, Element element) {
         boolean hasError = false;
@@ -111,9 +132,13 @@ public class ThemeableProcessor extends AbstractProcessor {
 
         if (verifyValidViewElement(element, hasError, enclosingElement, BindChrome.class.getSimpleName())) return true;
 
-        BindChrome binding = element.getAnnotation(BindChrome.class);
+        BindChrome bindingType = element.getAnnotation(BindChrome.class);
+        Binding<BindChrome> binding = new Binding<BindChrome>(BindChrome.class);
+        binding.setAnnotation(bindingType);
+        binding.setElement(element);
+
         BindingClass bindingClass = getOrCreateTargetClass(targetClassMap, enclosingElement);
-        bindingClass.addChromeBinding(binding, element);
+        bindingClass.addBinding(binding);
         return false;
     }
 
@@ -123,9 +148,13 @@ public class ThemeableProcessor extends AbstractProcessor {
 
         if (verifyValidViewElement(element, hasError, enclosingElement, BindStyle.class.getSimpleName())) return true;
 
-        BindStyle binding = element.getAnnotation(BindStyle.class);
+        BindStyle bindingType = element.getAnnotation(BindStyle.class);
+        Binding<BindStyle> binding = new Binding<BindStyle>(BindStyle.class);
+        binding.setAnnotation(bindingType);
+        binding.setElement(element);
+
         BindingClass bindingClass = getOrCreateTargetClass(targetClassMap, enclosingElement);
-        bindingClass.addStyleBinding(binding, element);
+        bindingClass.addBinding(binding);
         return false;
     }
 

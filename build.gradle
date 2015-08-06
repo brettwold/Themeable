@@ -7,21 +7,21 @@ buildscript {
         classpath 'com.android.tools.build:gradle:1.2.3'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
         classpath 'org.robolectric:robolectric-gradle-plugin:1.0.1'
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6"
     }
 }
-
 
 apply from: 'dependencies.gradle'
 
 allprojects {
     apply plugin: 'jacoco'
+    apply plugin: 'com.jfrog.bintray'
+    apply plugin: 'maven-publish'
+
+    project.version = "0.1"
 
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    def platform_keystore_path = properties.getProperty('platform_keystore_path')
-    def platform_key_password = properties.getProperty('platform_key_password')
-    def keystore_path = properties.getProperty('keystore_path')
-    def keystore_key_password = properties.getProperty('keystore_key_password')
     def sdkDir = properties.getProperty('sdk.dir')
 
     repositories {
@@ -74,50 +74,8 @@ allprojects {
             }
         }
     }
-
-    task customSigning(type: Exec, dependsOn: 'assembleRelease') {
-        doFirst {
-            if (!"${keystore_path}") {
-                throw new InvalidUserDataException('Missing path to the customSigning keystore.');
-            } else if (file("build/outputs/apk/${project.name}-release-unsigned.apk").exists()) {
-                executable "jarsigner"
-                args "-keystore", "${keystore_path}", "-storepass", "${keystore_key_password}", "-sigalg", "MD5withRSA", "-digestalg", "SHA-256", "-signedjar", "build/outputs/apk/${project.name}-release-albert.apk", "build/outputs/apk/${project.name}-release-unsigned.apk", "application"
-            } else {
-                throw new InvalidUserDataException("Nothing to sign here...")
-            }
-        }
-    }
-
-    task customPlatformSigning(type: Exec, dependsOn: 'assembleRelease') {
-        doFirst {
-            if (!"${keystore_path}") {
-                throw new InvalidUserDataException('Missing path to the customSigning keystore.');
-            } else if (file("build/outputs/apk/${project.name}-release-unsigned.apk").exists()) {
-                executable "jarsigner"
-                args "-keystore", "${platform_keystore_path}", "-storepass", "${platform_key_password}", "-sigalg", "MD5withRSA", "-digestalg", "SHA-256", "-signedjar", "build/outputs/apk/${project.name}-platform-albert.apk", "build/outputs/apk/${project.name}-release-unsigned.apk", "system_apps_platform_developer"
-            } else {
-                throw new InvalidUserDataException("Nothing to sign here...")
-            }
-        }
-    }
-
-    task installPlatformSigned(type: Exec, dependsOn: ['customPlatformSigning']) {
-        if (file("build/outputs/apk/${project.name}-platform-albert.apk").exists()) {
-            executable "adb"
-            args "install", "-r", "build/outputs/apk/${project.name}-platform-albert.apk"
-        } else {
-            executable "echo"
-            args "Nothing to deploy here..."
-        }
-    }
-
-    task installCustomSigned(type: Exec, dependsOn: ['customSigning']) {
-        if (file("build/outputs/apk/${project.name}-release-albert.apk").exists()) {
-            executable "adb"
-            args "install", "-r", "build/outputs/apk/${project.name}-release-albert.apk"
-        } else {
-            executable "echo"
-            args "Nothing to deploy here..."
-        }
-    }
 }
+
+
+
+defaultTasks ':themeable:uploadArchives', 'themeableprocessor:uploadArchives'

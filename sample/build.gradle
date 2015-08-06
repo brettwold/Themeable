@@ -32,3 +32,23 @@ dependencies {
 
     apt project(':themeableprocessor')
 }
+
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = 'Themeable'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/brettwold/Themeable.git'
+        version {
+            name = "${project.version}"
+            desc = 'Themeable initial alpha release'
+            released  = new Date()
+            vcsTag = 'v0.1'
+        }
+    }
+}
+

@@ -19,6 +19,16 @@
         android:orientation="vertical"
         android:layout_margin="@dimen/activity_horizontal_margin">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/image_replace"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_adjust_black_48dp"
+            android:adjustViewBounds="true"
+            android:maxWidth="@dimen/max_logo_width"
+            android:scaleType="centerCrop"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
