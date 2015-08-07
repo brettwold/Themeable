@@ -6,7 +6,7 @@ dependencies {
 
     compile presentationDependencies.supportAnnotation
     compile domainDependencies.okHttp
-
+    compile domainDependencies.gson
 }
 
 bintray {

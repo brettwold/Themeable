@@ -172,10 +172,10 @@ public class Themeable {
 
     public static final class Theme {
 
-        private String themeName;
+        private String name;
         private MaterialPalette palette;
-        private Set<StyleOverride> overrides = new HashSet<>();
-        private Set<ImageOverride> imageOverrides = new HashSet<>();
+        private Set<StyleOverride> styles = new HashSet<>();
+        private Set<ImageOverride> images = new HashSet<>();
 
         public static Theme newInstance(String themeName) {
             return new Theme(themeName);
@@ -190,11 +190,11 @@ public class Themeable {
                 throw new IllegalArgumentException("Theme name should consist only of letters");
             }
 
-            this.themeName = themeName;
+            this.name = themeName;
         }
 
         public String getThemeName() {
-            return themeName;
+            return name;
         }
 
         public Theme setPalette(MaterialPalette palette) {
@@ -203,12 +203,12 @@ public class Themeable {
         }
 
         public Theme addStyle(StyleOverride styleOverride) {
-            overrides.add(styleOverride);
+            styles.add(styleOverride);
             return this;
         }
 
         public Theme addImage(ImageOverride imageOverride) {
-            imageOverrides.add(imageOverride);
+            images.add(imageOverride);
             return this;
         }
 
@@ -217,11 +217,11 @@ public class Themeable {
         }
 
         public Set<StyleOverride> getOverrides() {
-            return overrides;
+            return styles;
         }
 
         public Set<ImageOverride> getImageOverrides() {
-            return imageOverrides;
+            return images;
         }
     }
 }

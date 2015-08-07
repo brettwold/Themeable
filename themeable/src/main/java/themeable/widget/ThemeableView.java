@@ -3,6 +3,7 @@ package themeable.widget;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
+import android.view.ViewGroup;
 
 import themeable.Themeable;
 import themeable.res.StyleOverride;
@@ -18,6 +19,7 @@ public class ThemeableView implements ViewOverride, StyleableConstants {
 
     private Drawable originalBackground;
     private int[] originalPadding = new int[4];
+    private ViewGroup.LayoutParams originalLayoutParams;
 
     public ThemeableView(View view, int styleResId) {
         this.view = view;
@@ -27,6 +29,8 @@ public class ThemeableView implements ViewOverride, StyleableConstants {
         originalPadding[1] = view.getPaddingTop();
         originalPadding[2] = view.getPaddingRight();
         originalPadding[3] = view.getPaddingBottom();
+        originalLayoutParams = view.getLayoutParams();
+
     }
 
     @Override

@@ -1,0 +1,48 @@
+{
+"name": "MyRedTheme",
+        "palette": {
+                "primary": "#fff44336",
+                "primaryDark": "#ffd32f2f",
+                "primaryLight": "#ffffcdd2",
+                "accent": "#ffff9800",
+                "textPrimary": "#ff212121",
+                "textSecondary": "#ff727272",
+                "textIcons": "#ffffffff",
+                "windowBackground": "#ffffffff"
+        },
+        "styles": [{
+                "name": "Title",
+                "textColor": "palette.primary",
+                "backgroundColor": "#00000000",
+                "typeface": "IndieFlower",
+                "textSize": "38sp",
+                "textAllCaps": false,
+                "padding": { "unit":"sp",
+                                "left": 0,
+                                "top": 10,
+                                "right": 0,
+                                "bottom": 0 }
+                },{
+                "name": "ButtonFull",
+                "textColor": "palette.textIcons",
+                "background": {
+                        "default": "palette.primary",
+                        "state_pressed": "palette.primaryDark"},
+                "typeface": "IndieFlower"
+                },{
+                "name": "ButtonPrimary",
+                "textColor": "palette.textIcons",
+                "background": {
+                        "default": "palette.accent",
+                        "state_pressed": "palette.primaryDark"},
+                "typeface": "IndieFlower",
+                "textAllCaps": true
+                }],
+        "images": [{
+                "name": "logo",
+                "url": "https://s3-eu-west-1.amazonaws.com/designs.aevi-test.com/tempfiles/santander_logo.png",
+                "restoreDrawable": "ic_adjust_black_48dp",
+                "maxHeight": "120sp",
+                "maxWidth": "120sp"
+        }]
+}
