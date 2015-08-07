@@ -133,7 +133,7 @@ public class ThemeableParser {
                                 slcb.addStateColour(parseState(entry.getKey()), parseSingleColor(entry.getValue().getAsString()));
                             }
                         }
-                        builder.setBackground(slcb.getDrawable());
+                        builder.setBackground(slcb);
                     }
 
                     if(obj.has(TYPEFACE)) {
