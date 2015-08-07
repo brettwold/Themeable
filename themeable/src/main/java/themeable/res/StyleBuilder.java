@@ -128,6 +128,24 @@ public class StyleBuilder implements StyleableConstants {
     }
 
     /**
+     * Sets the padding for this view
+     * @param unit The units the padding is being given in
+     * @param left Left padding
+     * @param top Top padding
+     * @param right Right padding
+     * @param bottom Bottom padding
+     * @return StyleBuilder
+     */
+    public StyleBuilder setPadding(int unit, int left, int top, int right, int bottom) {
+        overrideAppearance.setDimensionPixelSize(paddingLeft, getPixels(unit, left));
+        overrideAppearance.setDimensionPixelSize(paddingTop, getPixels(unit, top));
+        overrideAppearance.setDimensionPixelSize(paddingRight, getPixels(unit, right));
+        overrideAppearance.setDimensionPixelSize(paddingBottom, getPixels(unit, bottom));
+        overrideAppearance.setBoolean(padding, true);
+        return this;
+    }
+
+    /**
      * Build the new override and return the resultant {@link StyleOverride} object
      * @return The new {@link StyleOverride} object
      */

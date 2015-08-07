@@ -17,11 +17,16 @@ public class ThemeableView implements ViewOverride, StyleableConstants {
     protected int styleResId;
 
     private Drawable originalBackground;
+    private int[] originalPadding = new int[4];
 
     public ThemeableView(View view, int styleResId) {
         this.view = view;
         this.styleResId = styleResId;
         originalBackground = view.getBackground();
+        originalPadding[0] = view.getPaddingLeft();
+        originalPadding[1] = view.getPaddingTop();
+        originalPadding[2] = view.getPaddingRight();
+        originalPadding[3] = view.getPaddingBottom();
     }
 
     @Override
@@ -40,11 +45,20 @@ public class ThemeableView implements ViewOverride, StyleableConstants {
             } else if (originalBackground != null) {
                 setBackground(originalBackground);
             }
+
+            if(appearance.hasBoolean(padding)) {
+                view.setPadding(appearance.getDimensionPixelSize(paddingLeft, 0),
+                        appearance.getDimensionPixelSize(paddingTop, 0),
+                        appearance.getDimensionPixelSize(paddingRight, 0),
+                        appearance.getDimensionPixelSize(paddingBottom, 0));
+            }
         }
     }
 
     protected void restore() {
         setBackground(originalBackground);
+
+        view.setPadding(originalPadding[0], originalPadding[1], originalPadding[2], originalPadding[3]);
     }
 
     private void setBackground(Drawable background) {
