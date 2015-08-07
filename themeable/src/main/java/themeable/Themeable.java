@@ -56,7 +56,7 @@ public class Themeable {
         try {
             StyleBinder styleBinder = findStyleBinderForClass(source.getClass());
             styleBinder.unbind(source);
-            bound = true;
+            bound = false;
         } catch (Exception e) {
             Log.e(TAG, "Failed to find binding class", e);
         }
