@@ -42,7 +42,7 @@ public class Themeable {
             notifyBindersStyleChange();
             notifyBindersChromeChange();
         } catch (Exception e) {
-            Log.e(TAG, "Failed to find binding class", e);
+            Log.i(TAG, "Failed to find binding for class: " + source.getClass().getName() + " no binding will occur. Attempt to bind an object with no @BindStyle annotations");
         }
     }
 
@@ -59,7 +59,6 @@ public class Themeable {
             bound = false;
         } catch (Exception e) {
             Log.i(TAG, "Failed to find binding for class: " + source.getClass().getName() + " no binding will occur. Attempt to bind an object with no @BindStyle annotations");
-            //Log.e(TAG, "Failed to find binding class", e);
         }
     }
 
