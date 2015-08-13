@@ -250,7 +250,7 @@ public class ThemeableParser {
         }
     }
 
-    public static Themeable.Theme fromJSON(Context context, String json) throws ThemeableParseExeception {
+    public static Themeable.Theme fromJSON(Context context, String json) throws ThemeableParseException {
 
         try {
             GsonBuilder gsonBuilder = new GsonBuilder();
@@ -262,7 +262,7 @@ public class ThemeableParser {
             Themeable.Theme theme = gson.fromJson(json, Themeable.Theme.class);
             return theme;
         } catch(Exception e) {
-            throw new ThemeableParseExeception("Unable to parse Theme JSON file", e);
+            throw new ThemeableParseException("Unable to parse Theme JSON file", e);
         }
     }
 }
