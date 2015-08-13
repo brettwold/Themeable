@@ -25,6 +25,7 @@ import themeable.BindChrome;
 import themeable.BindImage;
 import themeable.BindStyle;
 import themeable.MaterialPalette;
+import themeable.ThemeableParseExeception;
 import themeable.Themeable;
 import themeable.ThemeableFonts;
 import themeable.ThemeableParser;
@@ -101,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
             redTheme = ThemeableParser.fromJSON(this, rjson);
         } catch (IOException e) {
             Log.e(TAG, "Failed to read theme file", e);
+        } catch (ThemeableParseExeception e) {
+            Log.e(TAG, "Failed to parse theme file", e);
         }
 
         blueTheme = Themeable.Theme.newInstance("MyBlueTheme")
