@@ -127,7 +127,6 @@ public class ImageCache {
                     public void run() {
                         view.setImageBitmap(bitmap);
                         if(width > 0 && height > 0) {
-                            Log.d("XXX", "Setting size " + width + "x" + height);
                             view.getLayoutParams().height = height;
                             view.getLayoutParams().width = width;
                             view.requestLayout();

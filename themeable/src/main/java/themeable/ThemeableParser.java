@@ -222,17 +222,25 @@ public class ThemeableParser {
                 int id = context.getResources().getIdentifier(restore, DRAWABLE, context.getPackageName());
                 builder.setRestoreResourceId(id);
 
-                ResourceUtils.ResourceDimension maxHeight = ResourceUtils.stringToDimension(obj.get(MAX_HEIGHT).getAsString());
-                builder.setMaxHeight(maxHeight.getUnit(), (int) maxHeight.getValue());
+                if(obj.has(MAX_HEIGHT)) {
+                    ResourceUtils.ResourceDimension maxHeight = ResourceUtils.stringToDimension(obj.get(MAX_HEIGHT).getAsString());
+                    builder.setMaxHeight(maxHeight.getUnit(), (int) maxHeight.getValue());
+                }
 
-                ResourceUtils.ResourceDimension maxWidth = ResourceUtils.stringToDimension(obj.get(MAX_WIDTH).getAsString());
-                builder.setMaxWidth(maxWidth.getUnit(), (int) maxWidth.getValue());
+                if(obj.has(MAX_WIDTH)) {
+                    ResourceUtils.ResourceDimension maxWidth = ResourceUtils.stringToDimension(obj.get(MAX_WIDTH).getAsString());
+                    builder.setMaxWidth(maxWidth.getUnit(), (int) maxWidth.getValue());
+                }
 
-                ResourceUtils.ResourceDimension height = ResourceUtils.stringToDimension(obj.get(HEIGHT).getAsString());
-                builder.setHeight(height.getUnit(), (int) height.getValue());
+                if(obj.has(HEIGHT)) {
+                    ResourceUtils.ResourceDimension height = ResourceUtils.stringToDimension(obj.get(HEIGHT).getAsString());
+                    builder.setHeight(height.getUnit(), (int) height.getValue());
+                }
 
-                ResourceUtils.ResourceDimension width = ResourceUtils.stringToDimension(obj.get(WIDTH).getAsString());
-                builder.setWidth(width.getUnit(), (int) width.getValue());
+                if(obj.has(WIDTH)) {
+                    ResourceUtils.ResourceDimension width = ResourceUtils.stringToDimension(obj.get(WIDTH).getAsString());
+                    builder.setWidth(width.getUnit(), (int) width.getValue());
+                }
 
                 ImageOverride imageOverride = builder.build();
 
@@ -242,15 +250,19 @@ public class ThemeableParser {
         }
     }
 
-    public static Themeable.Theme fromJSON(Context context, String json) {
+    public static Themeable.Theme fromJSON(Context context, String json) throws ThemeableParseExeception {
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        MaterialPaletteDeserializer mpd = new MaterialPaletteDeserializer();
-        gsonBuilder.registerTypeAdapter(MaterialPalette.class, mpd);
-        gsonBuilder.registerTypeAdapter(StyleOverride.class, new StyleOverrideDeserializer(context, mpd));
-        gsonBuilder.registerTypeAdapter(ImageOverride.class, new ImageOverrideDeserializer(context));
-        Gson gson = gsonBuilder.create();
-        Themeable.Theme theme = gson.fromJson(json, Themeable.Theme.class);
-        return theme;
+        try {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            MaterialPaletteDeserializer mpd = new MaterialPaletteDeserializer();
+            gsonBuilder.registerTypeAdapter(MaterialPalette.class, mpd);
+            gsonBuilder.registerTypeAdapter(StyleOverride.class, new StyleOverrideDeserializer(context, mpd));
+            gsonBuilder.registerTypeAdapter(ImageOverride.class, new ImageOverrideDeserializer(context));
+            Gson gson = gsonBuilder.create();
+            Themeable.Theme theme = gson.fromJson(json, Themeable.Theme.class);
+            return theme;
+        } catch(Exception e) {
+            throw new ThemeableParseExeception("Unable to parse Theme JSON file", e);
+        }
     }
 }
