@@ -132,14 +132,26 @@ public class Themeable {
     }
 
     private static void notifyBindersStyleChange() {
-        for(StyleBinder binder : binders.values()) {
-            binder.notifyStyleChange();
+        for(final StyleBinder binder : binders.values()) {
+            View v = binder.getRootView();
+            v.post(new Runnable() {
+                @Override
+                public void run() {
+                    binder.notifyStyleChange();
+                }
+            });
         }
     }
 
     private static void notifyBindersChromeChange() {
-        for(StyleBinder binder : binders.values()) {
-            binder.notifyChromeChange();
+        for(final StyleBinder binder : binders.values()) {
+            View v = binder.getRootView();
+            v.post(new Runnable() {
+                @Override
+                public void run() {
+                    binder.notifyChromeChange();
+                }
+            });
         }
     }
 

@@ -60,11 +60,18 @@ public class CodeGenerator {
         MethodSpec.Builder notifyChrome = methodBuilder("notifyChromeChange")
                 .addModifiers(PUBLIC);
 
+        MethodSpec.Builder getRootView = methodBuilder("getRootView")
+                .addModifiers(PUBLIC)
+                .returns(ClassName.get("android.view", "View"));
+
         ParameterizedTypeName arList = ParameterizedTypeName.get(ClassName.get(ArrayList.class), ClassName.get(ChromeOverride.class));
         builder.addField(builder(targetCls, "target", PRIVATE).build());
+        builder.addField(builder(ClassName.get("android.view", "View"), "rootView", PRIVATE).build());
         builder.addField(builder(arList, "chromeBindings", PRIVATE).build());
+        getRootView.addStatement("return rootView");
 
         bind.addStatement(addSetTarget());
+        bind.addStatement(addSetView());
         bind.addStatement(addCreateChromeBindings(), arList);
 
         unbind.addStatement(addRemoveChromeBindings());
@@ -85,6 +92,7 @@ public class CodeGenerator {
         }
 
         builder.addMethod(bind.build());
+        builder.addMethod(getRootView.build());
         builder.addMethod(unbind.build());
         builder.addMethod(notifyStyle.build());
         builder.addMethod(notifyChrome.build());
@@ -201,6 +209,12 @@ public class CodeGenerator {
     private static String addSetTarget() {
         StringBuilder statement = new StringBuilder();
         statement.append("this.target = target");
+        return statement.toString();
+    }
+
+    private static String addSetView() {
+        StringBuilder statement = new StringBuilder();
+        statement.append("this.rootView = view");
         return statement.toString();
     }
 

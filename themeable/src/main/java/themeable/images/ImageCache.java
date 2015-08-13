@@ -58,12 +58,17 @@ public class ImageCache {
 
     public static void restore(Themeable.Theme theme) {
         Set<ImageOverride> imageOverrides = theme.getImageOverrides();
-        for (ImageOverride imageOverride: imageOverrides) {
+        for (final ImageOverride imageOverride: imageOverrides) {
             final String key = imageOverride.getKey();
             if(imageOverride.hasRestoreId()) {
                 Set<ImageView> views = imageViewKeyMap.get(key);
-                for (ImageView view : views) {
-                    view.setImageResource(imageOverride.getRestoreId());
+                for (final ImageView view : views) {
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.setImageResource(imageOverride.getRestoreId());
+                        }
+                    });
                 }
             }
         }

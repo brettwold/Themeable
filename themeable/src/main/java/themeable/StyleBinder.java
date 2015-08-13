@@ -9,6 +9,8 @@ public abstract class StyleBinder<T> {
 
     public abstract void bind(T source, View view);
 
+    public abstract View getRootView();
+
     public abstract void unbind(T source);
 
     public abstract void notifyStyleChange();
