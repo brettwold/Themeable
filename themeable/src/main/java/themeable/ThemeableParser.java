@@ -198,6 +198,8 @@ public class ThemeableParser {
         private static final String DRAWABLE = "drawable";
         private static final String MAX_HEIGHT = "maxHeight";
         private static final String MAX_WIDTH = "maxWidth";
+        private static final String HEIGHT = "height";
+        private static final String WIDTH = "width";
 
         private Context context;
 
@@ -221,10 +223,16 @@ public class ThemeableParser {
                 builder.setRestoreResourceId(id);
 
                 ResourceUtils.ResourceDimension maxHeight = ResourceUtils.stringToDimension(obj.get(MAX_HEIGHT).getAsString());
-                builder.setMaxHeight(maxHeight.getUnit(), (int)maxHeight.getValue());
+                builder.setMaxHeight(maxHeight.getUnit(), (int) maxHeight.getValue());
 
                 ResourceUtils.ResourceDimension maxWidth = ResourceUtils.stringToDimension(obj.get(MAX_WIDTH).getAsString());
-                builder.setMaxHeight(maxWidth.getUnit(), (int) maxWidth.getValue());
+                builder.setMaxWidth(maxWidth.getUnit(), (int) maxWidth.getValue());
+
+                ResourceUtils.ResourceDimension height = ResourceUtils.stringToDimension(obj.get(HEIGHT).getAsString());
+                builder.setHeight(height.getUnit(), (int) height.getValue());
+
+                ResourceUtils.ResourceDimension width = ResourceUtils.stringToDimension(obj.get(WIDTH).getAsString());
+                builder.setWidth(width.getUnit(), (int) width.getValue());
 
                 ImageOverride imageOverride = builder.build();
 

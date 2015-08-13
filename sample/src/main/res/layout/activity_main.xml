@@ -27,7 +27,7 @@
             android:src="@drawable/ic_adjust_black_48dp"
             android:adjustViewBounds="true"
             android:maxWidth="@dimen/max_logo_width"
-            android:scaleType="centerCrop"/>
+            android:scaleType="fitCenter"/>
 
         <TextView
             android:layout_width="wrap_content"

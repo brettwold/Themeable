@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     @InjectView(R.id.image_replace)
     ImageView imageView;
 
-    Themeable.Theme redThemeJson, blueTheme, greenTheme;
+    Themeable.Theme redTheme, blueTheme, greenTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,36 +97,38 @@ public class MainActivity extends AppCompatActivity {
                 "#ff795548", "#ff212121", "#ff727272", "#ffffffff", "#ffcccccc");
 
         try {
-            String json = string(Okio.buffer(Okio.source(getAssets().open("redtheme.json"))));
-            redThemeJson = ThemeableParser.fromJSON(this, json);
+            String rjson = string(Okio.buffer(Okio.source(getAssets().open("redtheme.json"))));
+            redTheme = ThemeableParser.fromJSON(this, rjson);
+            String bjson = string(Okio.buffer(Okio.source(getAssets().open("bluetheme.json"))));
+            blueTheme = ThemeableParser.fromJSON(this, bjson);
         } catch (IOException e) {
             Log.e(TAG, "Failed to read theme file", e);
         }
 
-        blueTheme = Themeable.Theme.newInstance("MyBlueTheme")
-                .setPalette(bluePalette)
-                .addStyle(new StyleBuilder(this, R.style.Title)
-                    .setBackgroundColor(Color.TRANSPARENT)
-                    .setTypeface(ROBOTO_BOLD)
-                    .setTextColor(null, bluePalette.getPrimaryColor())
-                    .setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
-                    .setTextAllCaps(true)
-                    .setPadding(TypedValue.COMPLEX_UNIT_SP, 0, 100, 0, 0)
-                        .build())
-                .addStyle(new StyleBuilder(this, R.style.ButtonFull)
-                    .setTextColor(null, bluePalette.getTextIconsColor())
-                    .setBackground(new StateListColourDrawableBuilder(bluePalette.getPrimaryColor())
-                            .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
-                    .setTypeface(ROBOTO_BOLD)
-                    .setTextAllCaps(true)
-                        .build())
-                .addStyle(new StyleBuilder(this, R.style.ButtonPrimary)
-                        .setTextColor(null, bluePalette.getTextIconsColor())
-                        .setBackground(new StateListColourDrawableBuilder(bluePalette.getAccentColor())
-                                .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
-                        .setTypeface(ROBOTO_BOLD)
-                        .setTextAllCaps(true)
-                        .build());
+//        blueTheme = Themeable.Theme.newInstance("MyBlueTheme")
+//                .setPalette(bluePalette)
+//                .addStyle(new StyleBuilder(this, R.style.Title)
+//                    .setBackgroundColor(Color.TRANSPARENT)
+//                    .setTypeface(ROBOTO_BOLD)
+//                    .setTextColor(null, bluePalette.getPrimaryColor())
+//                    .setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
+//                    .setTextAllCaps(true)
+//                    .setPadding(TypedValue.COMPLEX_UNIT_SP, 0, 100, 0, 0)
+//                        .build())
+//                .addStyle(new StyleBuilder(this, R.style.ButtonFull)
+//                    .setTextColor(null, bluePalette.getTextIconsColor())
+//                    .setBackground(new StateListColourDrawableBuilder(bluePalette.getPrimaryColor())
+//                            .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
+//                    .setTypeface(ROBOTO_BOLD)
+//                    .setTextAllCaps(true)
+//                        .build())
+//                .addStyle(new StyleBuilder(this, R.style.ButtonPrimary)
+//                        .setTextColor(null, bluePalette.getTextIconsColor())
+//                        .setBackground(new StateListColourDrawableBuilder(bluePalette.getAccentColor())
+//                                .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
+//                        .setTypeface(ROBOTO_BOLD)
+//                        .setTextAllCaps(true)
+//                        .build());
 
         greenTheme = Themeable.Theme.newInstance("MyGreenTheme")
                 .setPalette(greenPalette)
@@ -177,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
     public void setColour(Button b) {
         switch(b.getId()) {
             case R.id.button_red:
-                Themeable.applyTheme(redThemeJson);
+                Themeable.applyTheme(redTheme);
                 break;
             case R.id.button_blue:
                 Themeable.applyTheme(blueTheme);

@@ -10,6 +10,8 @@ public class ImageOverride {
     private int restoreId;
     private int maxWidthPixels;
     private int maxHeightPixels;
+    private int heightPixels;
+    private int widthPixels;
 
     public String getKey() {
         return key;
@@ -53,5 +55,21 @@ public class ImageOverride {
 
     public void setMaxHeightPixels(int maxHeightPixels) {
         this.maxHeightPixels = maxHeightPixels;
+    }
+
+    public int getHeightPixels() {
+        return heightPixels;
+    }
+
+    public void setHeightPixels(int heightPixels) {
+        this.heightPixels = heightPixels;
+    }
+
+    public int getWidthPixels() {
+        return widthPixels;
+    }
+
+    public void setWidthPixels(int widthPixels) {
+        this.widthPixels = widthPixels;
     }
 }

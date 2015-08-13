@@ -112,17 +112,26 @@ public class ImageCache {
             int maxWidth = imageOverride.getMaxWidthPixels();
             int maxHeight = imageOverride.getMaxHeightPixels();
             Bitmap bitmap = decodeSampledBitmapFromResource(imageFile.getAbsolutePath(), maxWidth, maxHeight);
-            setImageBitmap(key, bitmap);
+
+            int height = imageOverride.getHeightPixels();
+            int width = imageOverride.getWidthPixels();
+            setImageBitmap(key, bitmap, width, height);
         }
     }
 
-    private static void setImageBitmap(String key, final Bitmap bitmap) {
+    private static void setImageBitmap(String key, final Bitmap bitmap, final int width, final int height) {
         Set<ImageView> views = getImageViews(key);
         if(views != null) {
             for(final ImageView view : views) {
                 view.post(new Runnable() {
                     public void run() {
                         view.setImageBitmap(bitmap);
+                        if(width > 0 && height > 0) {
+                            Log.d("XXX", "Setting size " + width + "x" + height);
+                            view.getLayoutParams().height = height;
+                            view.getLayoutParams().width = width;
+                            view.requestLayout();
+                        }
                     }
                 });
             }

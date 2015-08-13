@@ -1,50 +1,49 @@
 {
-"name": "MyRedTheme",
+"name": "myBlueTheme",
         "palette": {
-                "primary": "#fff44336",
-                "primaryDark": "#ffd32f2f",
-                "primaryLight": "#ffffcdd2",
-                "accent": "#ffff9800",
-                "textPrimary": "#ff212121",
-                "textSecondary": "#ff727272",
+                "primary": "#ff0074a6",
+                "primaryDark": "#ff00395d",
+                "primaryLight": "#ffbbdefb",
+                "accent": "#ffe1e1e1",
+                "textPrimary": "#ff00395d",
+                "textSecondary": "#ff666666",
                 "textIcons": "#ffffffff",
                 "windowBackground": "#ffffffff"
         },
         "styles": [{
                 "name": "Title",
                 "textColor": "palette.primary",
-                "backgroundColor": "#00000000",
-                "typeface": "IndieFlower",
-                "textSize": "38sp",
+                "typeface": "RobotoThin",
                 "textAllCaps": false,
                 "padding": { "unit":"sp",
                                 "left": 0,
                                 "top": 10,
                                 "right": 0,
                                 "bottom": 0 }
-                },{
+        },{
                 "name": "ButtonFull",
                 "textColor": "palette.textIcons",
                 "background": {
                         "default": "palette.primary",
                         "state_pressed": "palette.primaryDark"},
-                "typeface": "IndieFlower"
-                },{
+                "typeface": "RobotoThin",
+                "textAllCaps": true
+        },{
                 "name": "ButtonPrimary",
-                "textColor": "palette.textIcons",
+                "textColor": "palette.textPrimary",
                 "background": {
                         "default": "palette.accent",
-                        "state_pressed": "palette.primaryDark"},
-                "typeface": "IndieFlower",
+                        "state_pressed": "palette.primaryLight"},
+                "typeface": "RobotoThin",
                 "textAllCaps": true
-                }],
+        }],
         "images": [{
                 "name": "logo",
-                "url": "https://s3-eu-west-1.amazonaws.com/designs.aevi-test.com/tempfiles/santander_logo.png",
+                "url": "https://s3-eu-west-1.amazonaws.com/designs.aevi-test.com/tempfiles/barclays_logo.png",
                 "restoreDrawable": "ic_adjust_black_48dp",
-                "maxHeight": "120sp",
-                "maxWidth": "120sp",
+                "maxHeight": "80sp",
+                "maxWidth": "320sp",
                 "height": "80sp",
-                "width": "80sp"
+                "width": "240sp"
         }]
 }

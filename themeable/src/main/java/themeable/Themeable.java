@@ -86,7 +86,11 @@ public class Themeable {
     public static void applyStyles(StyleOverride... styleOverrides) {
         if(bound) {
             for (StyleOverride o : styleOverrides) {
-                overrides.put(o.getStyleResourceId(), o);
+                if(o != null) {
+                    overrides.put(o.getStyleResourceId(), o);
+                } else {
+                    throw new RuntimeException("Attempt to apply dynamic style to an unknown style resource");
+                }
             }
             notifyBindersStyleChange();
             return;

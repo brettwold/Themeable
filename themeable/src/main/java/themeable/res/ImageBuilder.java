@@ -45,6 +45,16 @@ public class ImageBuilder {
         return this;
     }
 
+    public ImageBuilder setHeight(int unit, int size) {
+        imageOverride.setHeightPixels(getPixels(unit, size));
+        return this;
+    }
+
+    public ImageBuilder setWidth(int unit, int size) {
+        imageOverride.setWidthPixels(getPixels(unit, size));
+        return this;
+    }
+
     private int getPixels(int unit, float size) {
         return (int) TypedValue.applyDimension(unit, size, metrics);
     }
