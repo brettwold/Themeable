@@ -187,9 +187,27 @@ As you can see in the code below the image must also be given height and width p
 
 ```
 
+# License
 
-> Note: This library is *NOT* intended to replace the existing Android system for creating `Themes` as XML 
-> definitions. It is intended that this library be used in scenarios where it is desireable to release only
-> one instance of an application but still have it "Themed" dynamically. Usually this would entail the changing
-> of the style via some kind of external (online) service. For example where a single application is distributed to
-> multiple end user clients each requiring their own branding.
+ Copyright (C)2015 Brett Cherrington
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+
+# Warnings and limitations
+
+This library is *NOT* intended to replace the existing Android system for creating `Themes` as XML 
+definitions. It is intended that this library be used in scenarios where it is desireable to release only
+one instance of an application but still have it "Themed" dynamically. Usually this would entail the changing
+of the style via some kind of external (online) service. For example where a single application is distributed to
+multiple end user clients each requiring their own branding.
