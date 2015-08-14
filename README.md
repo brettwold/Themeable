@@ -111,33 +111,33 @@ Below is an example of how your a theme can be constructed.
 
 ```java
 
-        MaterialPalette bluePalette = MaterialPalette.build("#ff2196f3", "#ff1976D2", "#ffBBDEFB",
-                "#ffFF4081", "#ff212121", "#ff727272", "#ffffffff", "#fff1f1ff");
+    MaterialPalette bluePalette = MaterialPalette.build("#ff2196f3", "#ff1976D2", "#ffBBDEFB",
+            "#ffFF4081", "#ff212121", "#ff727272", "#ffffffff", "#fff1f1ff");
 
-        Themeable.Theme blueTheme = Themeable.Theme.newInstance("MyBlueTheme")
-                .setPalette(bluePalette)
-                .addStyle(new StyleBuilder(this, R.style.Title)
-                    .setBackgroundColor(Color.TRANSPARENT)
-                    .setTypeface(ROBOTO_BOLD)
-                    .setTextColor(null, bluePalette.getPrimaryColor())
-                    .setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
-                    .setTextAllCaps(true)
-                    .setPadding(TypedValue.COMPLEX_UNIT_SP, 0, 100, 0, 0)
-                        .build())
-                .addStyle(new StyleBuilder(this, R.style.ButtonFull)
-                    .setTextColor(null, bluePalette.getTextIconsColor())
-                    .setBackground(new StateListColourDrawableBuilder(bluePalette.getPrimaryColor())
-                    .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
-                    .setTypeface(ROBOTO_BOLD)
-                    .setTextAllCaps(true)
-                    .build())
-                .addStyle(new StyleBuilder(this, R.style.ButtonPrimary)
-                        .setTextColor(null, bluePalette.getTextIconsColor())
-                        .setBackground(new StateListColourDrawableBuilder(bluePalette.getAccentColor())
-                        .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
-                        .setTypeface(ROBOTO_BOLD)
-                        .setTextAllCaps(true)
-                        .build());
+    Themeable.Theme blueTheme = Themeable.Theme.newInstance("MyBlueTheme")
+        .setPalette(bluePalette)
+        .addStyle(new StyleBuilder(this, R.style.Title)
+            .setBackgroundColor(Color.TRANSPARENT)
+            .setTypeface(ROBOTO_BOLD)
+            .setTextColor(null, bluePalette.getPrimaryColor())
+            .setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
+            .setTextAllCaps(true)
+            .setPadding(TypedValue.COMPLEX_UNIT_SP, 0, 100, 0, 0)
+            .build())
+        .addStyle(new StyleBuilder(this, R.style.ButtonFull)
+            .setTextColor(null, bluePalette.getTextIconsColor())
+            .setBackground(new StateListColourDrawableBuilder(bluePalette.getPrimaryColor())
+            .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
+            .setTypeface(ROBOTO_BOLD)
+            .setTextAllCaps(true)
+            .build())
+        .addStyle(new StyleBuilder(this, R.style.ButtonPrimary)
+                .setTextColor(null, bluePalette.getTextIconsColor())
+                .setBackground(new StateListColourDrawableBuilder(bluePalette.getAccentColor())
+                .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
+                .setTypeface(ROBOTO_BOLD)
+                .setTextAllCaps(true)
+                .build());
 ```
 
 As you can see the `MaterialPalette` object is used during the theme build as well to ensure the colours used are consistent. This theme can then be set at any time by calling
@@ -159,6 +159,24 @@ Setting a `MaterialPalette` on the theme also adds the ability for View elements
     LinearLayout mainContent;
 
 ```   
+
+## Loading theme from JSON
+
+The entire theme can also be specified as a JSON file and loading either from your applications filesystem or from an online source.
+
+```java
+
+try {
+    String rjson = string(Okio.buffer(Okio.source(getAssets().open("redtheme.json"))));
+    redTheme = ThemeableParser.fromJSON(this, rjson);
+} catch (IOException e) {
+    Log.e(TAG, "Failed to read theme file", e);
+} catch (ThemeableParseException e) {
+    Log.e(TAG, "Failed to parse theme file", e);
+}
+
+```
+For examples of the JSON systax see the sample application in this project.
 
 ## Binding Images
 
