@@ -103,6 +103,91 @@ Once the font has been registered it can be used in the style overriding, for ex
             
 ```
 
+## Binding an entire Theme
+
+Themable includes the ability for you to create an entire set of styles in one go using the `Themeable.Theme` object. The Theme should be created along with a `MaterialPalette` object which sets the main colours for the applications chrome. The `MaterialPalette` is created by simply defining 8 colours which will be used as the overall colours within your application. 
+
+Below is an example of how your a theme can be constructed.
+
+```java
+
+        MaterialPalette bluePalette = MaterialPalette.build("#ff2196f3", "#ff1976D2", "#ffBBDEFB",
+                "#ffFF4081", "#ff212121", "#ff727272", "#ffffffff", "#fff1f1ff");
+
+        Themeable.Theme blueTheme = Themeable.Theme.newInstance("MyBlueTheme")
+                .setPalette(bluePalette)
+                .addStyle(new StyleBuilder(this, R.style.Title)
+                    .setBackgroundColor(Color.TRANSPARENT)
+                    .setTypeface(ROBOTO_BOLD)
+                    .setTextColor(null, bluePalette.getPrimaryColor())
+                    .setTextSize(TypedValue.COMPLEX_UNIT_SP, 20)
+                    .setTextAllCaps(true)
+                    .setPadding(TypedValue.COMPLEX_UNIT_SP, 0, 100, 0, 0)
+                        .build())
+                .addStyle(new StyleBuilder(this, R.style.ButtonFull)
+                    .setTextColor(null, bluePalette.getTextIconsColor())
+                    .setBackground(new StateListColourDrawableBuilder(bluePalette.getPrimaryColor())
+                    .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
+                    .setTypeface(ROBOTO_BOLD)
+                    .setTextAllCaps(true)
+                    .build())
+                .addStyle(new StyleBuilder(this, R.style.ButtonPrimary)
+                        .setTextColor(null, bluePalette.getTextIconsColor())
+                        .setBackground(new StateListColourDrawableBuilder(bluePalette.getAccentColor())
+                        .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
+                        .setTypeface(ROBOTO_BOLD)
+                        .setTextAllCaps(true)
+                        .build());
+```
+
+As you can see the `MaterialPalette` object is used during the theme build as well to ensure the colours used are consistent. This theme can then be set at any time by calling
+
+```java
+    Themeable.applyTheme(blueTheme);
+```
+
+Setting a `MaterialPalette` on the theme also adds the ability for View elements to be set to the default application 'Chrome'. This means they will adopt the colours from the `MaterialPalette` object according to there type. For instance the following will ensure that the toolbar background is set to the 'primary' colour whereas the LinearLayout will have it's background set to the 'windowBackground' colour.
+
+```java
+
+    @BindChrome(R.id.toolbar)
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
+    
+    @BindChrome(R.id.main_content)
+    @InjectView(R.id.main_content)
+    LinearLayout mainContent;
+
+```   
+
+## Binding Images
+
+Images can also be bound using the `@BindImage` annotation. This allows them to be dynamically swapped out by a theme if required. The replacement image must be available on a publically accessibile URL and your application must have the `android.permission.INTERNET` permission. The image will be downloaded and cached automatically by the application. When binding to an image it must be given a unique String tag so that it can be identified by Themeable for replacement.
+
+As you can see in the code below the image must also be given height and width parameters. The max height and width parameters determine the resolution at which the image is read into a `Bitmap` the main height and width parameters determine its final display size in your application. These are required so that when dynamically swapping images of different sizes you can ensure the image is displayed at the correct size.
+
+```java
+
+    private static final String KEY_LOGO = "logo";
+
+    @BindImage(KEY_LOGO)
+    @InjectView(R.id.image_replace)
+    ImageView imageView;
+
+    Themeable.Theme aTheme = Themeable.Theme.newInstance("AnImageTheme")
+    ...
+        .addImage(new ImageBuilder(this, KEY_LOGO)
+            .setUrl("https://s3-eu-west-1.amazonaws.com/myimagestore/logo.png")
+            .setRestoreResourceId(R.drawable.my_logo)
+            .setMaxHeight(TypedValue.COMPLEX_UNIT_DP, 240)
+            .setMaxWidth(TypedValue.COMPLEX_UNIT_DP, 240)
+            .setHeight(TypedValue.COMPLEX_UNIT_SP, 120)
+            .setWidth(TypedValue.COMPLEX_UNIT_SP, 120)
+            .build());
+
+```
+
+
 > Note: This library is *NOT* intended to replace the existing Android system for creating `Themes` as XML 
 > definitions. It is intended that this library be used in scenarios where it is desireable to release only
 > one instance of an application but still have it "Themed" dynamically. Usually this would entail the changing
