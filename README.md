@@ -5,6 +5,8 @@ This library allows Android developers to programmatically set styles on View el
 * Bind dynamic styles to view objects using annotations
 * Boilerplate code is generated for you
 * Group views into Lists set styles on all of them at once
+* Obtain style from an external online source as JSON
+* Dynamic image replacement from an online source (with caching)
 
 > Currently this library is in development and subject to change without notice. Consider it in raw Alpha form and 
 > *not* recommended for production use *at all*.
