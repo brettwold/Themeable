@@ -54,6 +54,15 @@ public class StyleBuilder implements StyleableConstants {
     }
 
     /**
+     * Sets the default text colour of the view
+     * @param color The default color
+     * @return StyleBuilder
+     */
+    public StyleBuilder setTextColor(@ColorInt int color) {
+        return setTextColor(null, color);
+    }
+
+    /**
      * Sets the text colours of the view for the given states. If null or an empty array is
      * given for the states then the default colour will be overridden
      * @param states The android states when this colour should be applied

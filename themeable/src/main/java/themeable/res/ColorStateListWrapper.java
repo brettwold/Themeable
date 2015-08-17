@@ -32,6 +32,10 @@ public class ColorStateListWrapper {
 
     private int[][] states;
     private int[] colors;
+    private int defaultColour;
+    private boolean hasDefault = false;
+
+    private ColorStateList csl;
 
     public ColorStateListWrapper(ColorStateList original) {
         try {
@@ -54,36 +58,55 @@ public class ColorStateListWrapper {
     }
 
     public void setColor(int[] colorStates, int color) {
-        if(colorStates == null || colorStates.length == 0) {
-            colors[0] = color;
-        } else {
-            boolean exists = false;
-            for (int i = 0; i < states.length; i++) {
-                int[] stateMatch = states[i];
-                if (Arrays.equals(stateMatch, colorStates)) {
-                    colors[i] = color;
-                    exists = true;
-                    break;
-                }
+
+        boolean exists = false;
+        for (int i = 0; i < states.length; i++) {
+            int[] stateMatch = states[i];
+            if ((stateMatch.length == 0 && colorStates == null) || Arrays.equals(stateMatch, colorStates)) {
+                colors[i] = color;
+                exists = true;
+                break;
             }
+        }
 
-            if (!exists) {
-                int[][] stateSpecList = new int[states.length + 1][20];
-                int[] colorList = new int[stateSpecList.length];
-
-                System.arraycopy(colors, 0, colorList, 0, colors.length);
-                System.arraycopy(states, 0, stateSpecList, 0, states.length);
-
-                stateSpecList[stateSpecList.length - 1] = colorStates;
-                colorList[stateSpecList.length - 1] = color;
-
-                colors = colorList;
-                states = stateSpecList;
+        if (!exists) {
+            if(colorStates == null || colorStates.length == 0) {
+                defaultColour = color;
+                hasDefault = true;
+            } else {
+                addStateColour(colorStates, color, false);
             }
         }
     }
 
+    private void addStateColour(int[] colorStates, int color, boolean end) {
+        int[][] stateSpecList = new int[states.length + 1][20];
+        int[] colorList = new int[stateSpecList.length];
+
+        if(!end) {
+            System.arraycopy(colors, 0, colorList, 1, colors.length);
+            System.arraycopy(states, 0, stateSpecList, 1, states.length);
+            stateSpecList[0] = colorStates;
+            colorList[0] = color;
+        } else {
+            System.arraycopy(colors, 0, colorList, 0, colors.length);
+            System.arraycopy(states, 0, stateSpecList, 0, states.length);
+            stateSpecList[stateSpecList.length - 1] = colorStates;
+            colorList[stateSpecList.length - 1] = color;
+        }
+
+        colors = colorList;
+        states = stateSpecList;
+    }
+
     public ColorStateList getColorStateList() {
-        return new ColorStateList(states, colors);
+        if(hasDefault && csl == null) {
+            addStateColour(new int[] {}, defaultColour, true);
+        }
+
+        if(csl == null) {
+            csl = new ColorStateList(states, colors);
+        }
+        return csl;
     }
 }

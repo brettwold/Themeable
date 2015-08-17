@@ -24,7 +24,10 @@
                                 "bottom": 0 }
                 },{
                 "name": "ButtonFull",
-                "textColor": "palette.textIcons",
+                "textColor": {
+                        "default": "palette.textIcons",
+                        "!state_enabled": "#ffff0000"
+                },
                 "background": {
                         "default": "palette.primary",
                         "state_pressed": "palette.primaryDark",

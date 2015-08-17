@@ -162,7 +162,18 @@ public class ThemeableParser {
                     }
                     if(obj.has(TEXT_COLOR)) {
                         JsonElement textColor = obj.get(TEXT_COLOR);
-                        builder.setTextColor(null,parseSingleColor(textColor.getAsString()));
+                        if(textColor.isJsonObject()) {
+                            JsonObject colourList = obj.get(TEXT_COLOR).getAsJsonObject();
+                            for(Map.Entry<String, JsonElement> entry : colourList.entrySet()) {
+                                if(!entry.getKey().equals(DEFAULT)) {
+                                    builder.setTextColor(parseState(entry.getKey()), parseSingleColor(entry.getValue().getAsString()));
+                                } else {
+                                    builder.setTextColor(parseSingleColor(entry.getValue().getAsString()));
+                                }
+                            }
+                        } else {
+                            builder.setTextColor(null, parseSingleColor(textColor.getAsString()));
+                        }
                     }
                     if(obj.has(TEXT_SIZE)) {
                         ResourceUtils.ResourceDimension dim = ResourceUtils.stringToDimension(obj.get(TEXT_SIZE).getAsString());
@@ -193,7 +204,6 @@ public class ThemeableParser {
                 negative = true;
                 stateStr = stateStr.substring(1);
             }
-            Log.d(TAG, "Looking for state called: " + stateStr + " neg:" + negative);
             Integer state = ResourceUtils.getStateFromString(stateStr);
             if(state != null) {
                 int[] states = new int[1];
