@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     @InjectView(R.id.another_text_view)
     TextView anotherTextView;
 
-    @BindStyle(value = R.style.ButtonFull, resourceIds = { R.id.button_red, R.id.button_blue, R.id.button_green })
+    @BindStyle(value = R.style.ButtonFull, resourceIds = { R.id.button_red, R.id.button_blue, R.id.button_green, R.id.button_disabled })
     List<Button> buttons;
 
     @InjectView(R.id.button_restore)
@@ -136,7 +136,8 @@ public class MainActivity extends AppCompatActivity {
                 .addStyle(new StyleBuilder(this, R.style.ButtonFull)
                     .setTextColor(null, bluePalette.getTextIconsColor())
                     .setBackground(new StateListColourDrawableBuilder(bluePalette.getPrimaryColor())
-                            .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor()))
+                            .addStateColour(new int[]{android.R.attr.state_pressed}, bluePalette.getPrimaryDarkColor())
+                            .addStateColour(new int[]{-android.R.attr.state_enabled}, bluePalette.getPrimaryLightColor()))
                     .setTypeface(ROBOTO_BOLD)
                     .setTextAllCaps(true)
                         .build())
@@ -160,13 +161,14 @@ public class MainActivity extends AppCompatActivity {
                 .addStyle(new StyleBuilder(this, R.style.ButtonFull)
                     .setTextColor(null, greenPalette.getTextIconsColor())
                     .setBackground(new StateListColourDrawableBuilder(greenPalette.getPrimaryColor())
-                            .addStateColour(new int[]{android.R.attr.state_pressed}, greenPalette.getPrimaryLightColor()))
+                            .addStateColour(new int[]{android.R.attr.state_pressed}, greenPalette.getPrimaryLightColor())
+                            .addStateColour(new int[]{-android.R.attr.state_enabled}, greenPalette.getPrimaryLightColor()))
                     .setTypeface(ROBOTO_LIGHT)
                     .build())
                 .addStyle(new StyleBuilder(this, R.style.ButtonPrimary)
                     .setTextColor(null, greenPalette.getTextIconsColor())
                     .setBackground(new StateListColourDrawableBuilder(greenPalette.getAccentColor())
-                            .addStateColour(new int[]{android.R.attr.state_pressed}, greenPalette.getPrimaryDarkColor()))
+                                    .addStateColour(new int[]{android.R.attr.state_pressed}, greenPalette.getPrimaryDarkColor()))
                     .setTypeface(ROBOTO_LIGHT)
                     .setTextAllCaps(true)
                     .build());

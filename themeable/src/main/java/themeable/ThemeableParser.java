@@ -19,6 +19,7 @@ package themeable;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -187,11 +188,19 @@ public class ThemeableParser {
         }
 
         private int[] parseState(String stateStr) {
+            boolean negative = false;
+            if(stateStr.startsWith("!")) {
+                negative = true;
+                stateStr = stateStr.substring(1);
+            }
+            Log.d(TAG, "Looking for state called: " + stateStr + " neg:" + negative);
             Integer state = ResourceUtils.getStateFromString(stateStr);
             if(state != null) {
                 int[] states = new int[1];
-                states[0] = ResourceUtils.getStateFromString(stateStr);
+                states[0] = negative ? -ResourceUtils.getStateFromString(stateStr) : ResourceUtils.getStateFromString(stateStr);
                 return states;
+            } else {
+                Log.d(TAG, "Failed to find state called: " + stateStr);
             }
             return new int[] {};
         }

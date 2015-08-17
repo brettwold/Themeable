@@ -27,7 +27,8 @@
                 "textColor": "palette.textIcons",
                 "background": {
                         "default": "palette.primary",
-                        "state_pressed": "palette.primaryDark"},
+                        "state_pressed": "palette.primaryDark",
+                        "!state_enabled": "palette.primaryLight"},
                 "typeface": "IndieFlower"
                 },{
                 "name": "ButtonPrimary",
