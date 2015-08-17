@@ -264,8 +264,8 @@ public class CodeGenerator {
 
     private static String addChromeLoopNotify() {
         StringBuilder statement = new StringBuilder();
-        statement.append("for(ChromeOverride co : chromeBindings )")
-                .append("{ co.overrideAppearance(); }");
+        statement.append("if(this.chromeBindings != null) { for(ChromeOverride co : chromeBindings )")
+                .append("{ co.overrideAppearance(); }}");
 
         return statement.toString();
     }
