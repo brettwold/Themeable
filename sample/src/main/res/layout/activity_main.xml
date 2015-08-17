@@ -73,6 +73,15 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="Disabled Button"
+            android:id="@+id/button_disabled"
+            android:layout_gravity="center_horizontal"
+            android:enabled="false"
+            style="@style/ButtonFull"/>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="Restore"
             android:id="@+id/button_restore"
             android:layout_gravity="center_horizontal"
