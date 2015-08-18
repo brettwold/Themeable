@@ -14,8 +14,8 @@ ext {
 
     junitVersion = '4.12'
     hamcrestVersion = '1.3'
-    mockitoVersion = '1.9.5'
-    robolectricVersion = '2.4'
+    mockitoVersion = '1.10.19'
+    robolectricVersion = '3.0'
 
     daggerCompilerVersion = '2.0.1'
 
