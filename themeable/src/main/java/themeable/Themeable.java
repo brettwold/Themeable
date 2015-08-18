@@ -126,6 +126,7 @@ public class Themeable {
         palette = null;
         notifyBindersChromeChange();
         notifyBindersStyleChange();
+        currentTheme = null;
     }
 
     /**
@@ -187,9 +188,19 @@ public class Themeable {
         return overrides.get(resid);
     }
 
+    /**
+     * Returns the current palette if one has been applied
+     * @return {@link MaterialPalette} object
+     */
     public static MaterialPalette getCurrentPalette() {
         return palette;
     }
+
+    /**
+     * Returns the current theme if one has been applied
+     * @return {@link Themeable.Theme} object
+     */
+    public static Theme getCurrentTheme() { return currentTheme; }
 
     private static StyleBinder findStyleBinderForClass(Class<?> cls) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         StyleBinder styleBinder = binders.get(cls);

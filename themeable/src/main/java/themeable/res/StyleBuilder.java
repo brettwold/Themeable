@@ -42,6 +42,15 @@ public class StyleBuilder implements StyleableConstants {
     private DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
 
     public StyleBuilder(Context context, int styleResId) {
+
+        if(context == null) {
+            throw new IllegalArgumentException("Context is required to override styles");
+        }
+
+        if(styleResId == 0) {
+            throw new IllegalArgumentException("No style resource ID passed to style override");
+        }
+
         this.context = context;
         this.styleResId = styleResId;
 
@@ -71,9 +80,11 @@ public class StyleBuilder implements StyleableConstants {
      */
     public StyleBuilder setTextColor(int[] states, @ColorInt int color) {
         ColorStateListWrapper colors = overrideAppearance.getColorStateList(textColor);
-        if(colors == null) {
+        if(colors == null && originalTextAppearance != null) {
             ColorStateList colorStateList = originalTextAppearance.getColorStateList(textColor);
             colors = new ColorStateListWrapper(colorStateList);
+        } else if(colors == null) {
+            colors = new ColorStateListWrapper();
         }
         colors.setColor(states, color);
         overrideAppearance.setColorStateList(textColor, colors);
@@ -99,11 +110,17 @@ public class StyleBuilder implements StyleableConstants {
      * @return StyleBuilder
      */
     public StyleBuilder setBackground(Drawable drawable) {
+        if(drawable == null) {
+            throw new IllegalArgumentException("Attempting to set a null drawable in style override");
+        }
         overrideAppearance.setDrawable(backgroundColor, drawable);
         return this;
     }
 
     public StyleBuilder setBackground(StateListColourDrawableBuilder stateListColourBuilder) {
+        if(stateListColourBuilder == null) {
+            throw new IllegalArgumentException("Attempting to set a null state list colour builder in style override");
+        }
         overrideAppearance.setDrawable(backgroundColor, stateListColourBuilder);
         return this;
     }
@@ -122,6 +139,9 @@ public class StyleBuilder implements StyleableConstants {
      * @return StyleBuilder
      */
     public StyleBuilder setTypeface(String fontName) {
+        if(fontName == null) {
+            throw new IllegalArgumentException("Attempt to set a typeface name to null");
+        }
         overrideAppearance.setTypeface(typeface, fontName);
         return this;
     }
@@ -134,6 +154,11 @@ public class StyleBuilder implements StyleableConstants {
      * @return StyleBuilder
      */
     public StyleBuilder setTextSize(int unit, float size) {
+
+        if(!ResourceUtils.isValidUnitType(unit)) {
+            throw new IllegalArgumentException("Invalid units type passed to setTextSize method (should be one of TypedValue.COMPLEX_UNIT_XXX): " + unit);
+        }
+
         int px = getPixels(unit, size);
         overrideAppearance.setDimensionPixelSize(textSize, px);
         return this;
@@ -163,6 +188,10 @@ public class StyleBuilder implements StyleableConstants {
      * @return StyleBuilder
      */
     public StyleBuilder setPadding(int unit, int left, int top, int right, int bottom) {
+        if(!ResourceUtils.isValidUnitType(unit)) {
+            throw new IllegalArgumentException("Invalid units type passed to setPadding method (should be one of TypedValue.COMPLEX_UNIT_XXX): " + unit);
+        }
+
         overrideAppearance.setDimensionPixelSize(paddingLeft, getPixels(unit, left));
         overrideAppearance.setDimensionPixelSize(paddingTop, getPixels(unit, top));
         overrideAppearance.setDimensionPixelSize(paddingRight, getPixels(unit, right));
@@ -176,7 +205,9 @@ public class StyleBuilder implements StyleableConstants {
      * @return The new {@link StyleOverride} object
      */
     public StyleOverride build() {
-        originalTextAppearance.recycle();
+        if(originalTextAppearance != null) {
+            originalTextAppearance.recycle();
+        }
         return overrideAppearance;
     }
 

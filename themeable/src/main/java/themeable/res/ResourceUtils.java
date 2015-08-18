@@ -140,4 +140,12 @@ public class ResourceUtils {
             return unit;
         }
     }
+
+    public static boolean isValidState(int state) {
+        return STATE_LOOKUP.containsValue(state);
+    }
+
+    public static boolean isValidUnitType(int units) {
+        return DIMENSION_LOOKUP.containsValue(units);
+    }
 }

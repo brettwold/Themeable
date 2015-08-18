@@ -37,6 +37,12 @@ public class ColorStateListWrapper {
 
     private ColorStateList csl;
 
+    public ColorStateListWrapper() {
+        colors = new int[1];
+        states = new int[1][20];
+        states[0] = new int[] {};
+    }
+
     public ColorStateListWrapper(ColorStateList original) {
         try {
             Field colorsField = ColorStateList.class.getDeclaredField("mColors");

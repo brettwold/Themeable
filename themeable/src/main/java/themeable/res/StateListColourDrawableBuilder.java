@@ -37,6 +37,13 @@ public class StateListColourDrawableBuilder {
     }
 
     public StateListColourDrawableBuilder addStateColour(int[] states, int colour) {
+
+        for(int state: states) {
+            if(!ResourceUtils.isValidState(state)) {
+                throw new IllegalArgumentException("Invalid state passed to StateListColourDrawableBuilder: " + state);
+            }
+        }
+
         stateColoursList.add(new StateColour(states, colour));
         return this;
     }
