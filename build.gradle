@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.2.3'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
         classpath 'org.robolectric:robolectric-gradle-plugin:1.0.1'
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6"
     }
@@ -14,7 +14,6 @@ buildscript {
 apply from: 'dependencies.gradle'
 
 allprojects {
-    apply plugin: 'jacoco'
     apply plugin: 'com.jfrog.bintray'
     apply plugin: 'maven-publish'
 
@@ -33,47 +32,6 @@ allprojects {
         maven { url "${sdkDir}/extras/android/m2repository" }
     }
 
-    jacoco {
-        toolVersion = "0.7.1.201405082137"
-        reportsDir = file("${projectDir}/build/reports/jacoco")
-    }
-
-    def coverageSourceDirs = [
-            'src/main/java',
-            'src/main/aidl'
-    ]
-
-    task jacocoTestReportcus(type: JacocoReport, dependsOn: ["testDebug", "assembleDebugAndroidTest"]) {
-        group = "Reporting"
-        description = "Generate Jacoco coverage reports after running tests."
-        reports {
-            xml.enabled = true
-            html.enabled = true
-        }
-        classDirectories = fileTree(
-                dir: './build/intermediates/classes/debug',
-                excludes: ['**/R*.class',
-                           '**/*$InjectAdapter.class',
-                           '**/*$ModuleAdapter.class',
-                           '**/*$ViewInjector*.class',
-                           '**/Dagger*.class',
-                           '**/*_Members*.class',
-                           '**/*_Get*.class',
-                           '**/*_Provide*.class',
-                           '**/*_Factory*.class'
-                ])
-        sourceDirectories = files(coverageSourceDirs)
-        executionData = files("$buildDir/jacoco/testDebug.exec")
-        // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
-        // We iterate through the compiled .class tree and rename $$ to $.
-        doFirst {
-            new File("$buildDir/intermediates/classes/").eachFileRecurse { file ->
-                if (file.name.contains('$$')) {
-                    file.renameTo(file.path.replace('$$', '$'))
-                }
-            }
-        }
-    }
 }
 
 
