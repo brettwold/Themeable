@@ -59,7 +59,11 @@ public class ImageCache {
                         downloader.downloadFile(url, imageFile.getAbsolutePath(), new AsyncFileDownloader.Callback() {
                             @Override
                             public void onCompleted(final File downloadedFile) {
-                                setImageViews(imageOverride, downloadedFile);
+                                try {
+                                    setImageViews(imageOverride, downloadedFile);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Failed to set replacement image", e);
+                                }
                             }
 
                             @Override
@@ -75,17 +79,19 @@ public class ImageCache {
 
     public static void restore(Themeable.Theme theme) {
         Set<ImageOverride> imageOverrides = theme.getImageOverrides();
-        for (final ImageOverride imageOverride: imageOverrides) {
-            final String key = imageOverride.getKey();
-            if(imageOverride.hasRestoreId()) {
-                Set<ImageView> views = imageViewKeyMap.get(key);
-                for (final ImageView view : views) {
-                    view.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            view.setImageResource(imageOverride.getRestoreId());
-                        }
-                    });
+        if(imageOverrides != null) {
+            for (final ImageOverride imageOverride : imageOverrides) {
+                final String key = imageOverride.getKey();
+                if (imageOverride.hasRestoreId()) {
+                    Set<ImageView> views = imageViewKeyMap.get(key);
+                    for (final ImageView view : views) {
+                        view.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.setImageResource(imageOverride.getRestoreId());
+                            }
+                        });
+                    }
                 }
             }
         }
