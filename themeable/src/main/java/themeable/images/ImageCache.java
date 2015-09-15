@@ -46,31 +46,33 @@ public class ImageCache {
     public static void applyImages(Themeable.Theme theme) {
 
         Set<ImageOverride> imageOverrides = theme.getImageOverrides();
-        for (final ImageOverride imageOverride: imageOverrides) {
-            String key = imageOverride.getKey();
-            if (ImageCache.hasKey(key)) {
-                File imageFile = getImageFile(key, theme);
-                if (imageFile.exists()) {
-                    setImageViews(imageOverride, imageFile);
-                } else {
-                    AsyncFileDownloader downloader = new AsyncFileDownloader();
-                    String url = imageOverride.getUrl();
-                    if(url != null) {
-                        downloader.downloadFile(url, imageFile.getAbsolutePath(), new AsyncFileDownloader.Callback() {
-                            @Override
-                            public void onCompleted(final File downloadedFile) {
-                                try {
-                                    setImageViews(imageOverride, downloadedFile);
-                                } catch (Exception e) {
-                                    Log.e(TAG, "Failed to set replacement image", e);
+        if(imageOverrides != null) {
+            for (final ImageOverride imageOverride: imageOverrides) {
+                String key = imageOverride.getKey();
+                if (ImageCache.hasKey(key)) {
+                    File imageFile = getImageFile(key, theme);
+                    if (imageFile.exists()) {
+                        setImageViews(imageOverride, imageFile);
+                    } else {
+                        AsyncFileDownloader downloader = new AsyncFileDownloader();
+                        String url = imageOverride.getUrl();
+                        if (url != null) {
+                            downloader.downloadFile(url, imageFile.getAbsolutePath(), new AsyncFileDownloader.Callback() {
+                                @Override
+                                public void onCompleted(final File downloadedFile) {
+                                    try {
+                                        setImageViews(imageOverride, downloadedFile);
+                                    } catch (Exception e) {
+                                        Log.e(TAG, "Failed to set replacement image", e);
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onError(Exception e, int responseCode) {
-                                Log.e(TAG, "Failed to download replacement image file", e);
-                            }
-                        });
+                                @Override
+                                public void onError(Exception e, int responseCode) {
+                                    Log.e(TAG, "Failed to download replacement image file", e);
+                                }
+                            });
+                        }
                     }
                 }
             }
