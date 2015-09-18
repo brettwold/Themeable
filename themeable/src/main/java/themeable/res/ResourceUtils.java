@@ -142,7 +142,7 @@ public class ResourceUtils {
     }
 
     public static boolean isValidState(int state) {
-        return STATE_LOOKUP.containsValue(state);
+        return STATE_LOOKUP.containsValue(Math.abs(state));
     }
 
     public static boolean isValidUnitType(int units) {
