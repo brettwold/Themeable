@@ -17,6 +17,9 @@
 
 package themeable.internal;
 
+import android.annotation.SuppressLint;
+
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
@@ -59,6 +62,7 @@ public class CodeGenerator {
 
         TypeSpec.Builder builder = classBuilder(bindingClass.getClassName())
                 .superclass(ParameterizedTypeName.get(ClassName.get(StyleBinder.class), targetCls))
+                .addAnnotation(AnnotationSpec.builder(SuppressLint.class).addMember("value", "$S", "ResourceType").build())
                 .addModifiers(PUBLIC, FINAL);
 
 

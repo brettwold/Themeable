@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'org.robolectric'
 apply plugin: 'jacoco'
 
 android {
@@ -66,7 +65,7 @@ def coverageSourceDirs = [
         'src/main/aidl'
 ]
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ["testDebug", "assembleDebugAndroidTest"]) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ["testDebugUnitTest"]) {
     group = "Reporting"
     description = "Generate Jacoco coverage reports after running tests."
     reports {

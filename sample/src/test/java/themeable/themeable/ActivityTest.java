@@ -2,11 +2,13 @@ package themeable.themeable;
 
 import android.widget.Button;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowLog;
 import org.robolectric.util.ActivityController;
 
 import themeable.MaterialPalette;
@@ -15,15 +17,20 @@ import themeable.ThemeableFonts;
 import themeable.sample.MainActivity;
 import themeable.sample.R;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertTrue;
 
 @Config(sdk = 16)
 @RunWith(RobolectricTestRunner.class)
 public class ActivityTest {
+
+    @Before
+    public void before() {
+        ShadowLog.stream = System.out;
+    }
 
     @Test
     public void can_start_sample_activity() {
