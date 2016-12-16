@@ -206,6 +206,22 @@ As you can see in the code below the image must also be given height and width p
             .build());
 
 ```
+# Usage
+While this library is in beta form you can access it publically from bintray. Eventually of course it may get published to jcenter.
+
+So first add the following to your main repositories in your root gradle file
+```
+    repositories {
+        maven {
+            url 'https://dl.bintray.com/brettwold/maven/'
+        }
+    }
+```
+
+Then add the following to your dependencies
+```
+compile 'com.brettwold:themeable:0.18'
+```
 
 # License
 
